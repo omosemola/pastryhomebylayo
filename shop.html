@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Pastry Home by Layo</title>
+    <link href="./css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar">
+        <div class="container flex items-center justify-between">
+            <a href="index.html" class="logo">
+                <img src="./assets/logo.png" alt="Pastry Home by Layo">
+            </a>
+
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="shop.html" class="nav-link">Shop</a>
+                <a href="index.html#about" class="nav-link">About</a>
+                <a href="index.html#contact" class="nav-link">Contact</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="cart.html" class="cart-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-shopping-cart-icon lucide-shopping-cart">
+                        <circle cx="8" cy="21" r="1" />
+                        <circle cx="19" cy="21" r="1" />
+                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+                    </svg>
+                    <span class="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Shop Section -->
+    <section class="section-padding section-shop" style="padding-top: 8rem;">
+        <div class="container">
+            <div class="text-center section-header">
+                <span class="hero-subtitle">Fresh from the oven</span>
+                <h2 class="section-title">All Our Pastries</h2>
+                <p style="color: var(--color-gray-500); margin-top: 1rem;">Discover our complete collection of
+                    handcrafted delights</p>
+            </div>
+
+            <div class="product-grid">
+                <!-- Product Card 1 -->
+                <div class="product-card" style="transition-duration: 700ms;">
+                    <div class="product-image-container bg-yellow">
+                        <img src="./assets/products/banana_bread.png" alt="Banana Bread"
+                            style="width: 100%; height: 100%; object-fit: cover;">
+                        <button class="add-btn">
+                            <i data-lucide="shopping-bag" style="width: 1.25rem; height: 1.25rem;"></i>
+                        </button>
+                    </div>
+                    <div class="product-details">
+                        <div class="product-meta">
+                            <span class="badge">Top Seller</span>
+                            <div class="rating">
+                                <i data-lucide="star" style="width: 0.75rem; height: 0.75rem; fill: currentColor;"></i>
+                                <span class="rating-val">4.8</span>
+                            </div>
+                        </div>
+                        <h3 class="product-title">Banana Bread</h3>
+                        <div class="price-row">
+                            <span class="price">$4.50</span>
+                            <button class="text-link-btn">
+                                <i class="fa-solid fa-cart-arrow-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Card 2 -->
+                <div class="product-card" style="transition-duration: 700ms;" data-delay="100">
+                    <div class="product-image-container bg-red">
+                        <span class="product-placeholder">Image</span>
+                        <button class="add-btn">
+                            <i data-lucide="shopping-bag" style="width: 1.25rem; height: 1.25rem;"></i>
+                        </button>
+                    </div>
+                    <div class="product-details">
+                        <div class="product-meta">
+                            <span class="badge">New</span>
+                            <div class="rating">
+                                <i data-lucide="star" style="width: 0.75rem; height: 0.75rem; fill: currentColor;"></i>
+                                <span class="rating-val">4.9</span>
+                            </div>
+                        </div>
+                        <h3 class="product-title">Strawberry Tart</h3>
+                        <div class="price-row">
+                            <span class="price">$6.00</span>
+                            <button class="text-link-btn">
+                                <i class="fa-solid fa-cart-arrow-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Card 3 -->
+                <div class="product-card" style="transition-duration: 700ms;" data-delay="200">
+                    <div class="product-image-container bg-amber">
+                        <span class="product-placeholder">Image</span>
+                        <button class="add-btn">
+                            <i data-lucide="shopping-bag" style="width: 1.25rem; height: 1.25rem;"></i>
+                        </button>
+                    </div>
+                    <div class="product-details">
+                        <div class="product-meta">
+                            <span class="badge">Favorite</span>
+                            <div class="rating">
+                                <i data-lucide="star" style="width: 0.75rem; height: 0.75rem; fill: currentColor;"></i>
+                                <span class="rating-val">4.7</span>
+                            </div>
+                        </div>
+                        <h3 class="product-title">Chocolate Eclair</h3>
+                        <div class="price-row">
+                            <span class="price">$5.50</span>
+                            <button class="text-link-btn">
+                                <i class="fa-solid fa-cart-arrow-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Card 4 -->
+                <div class="product-card" style="transition-duration: 700ms;" data-delay="300">
+                    <div class="product-image-container bg-green">
+                        <span class="product-placeholder">Image</span>
+                        <button class="add-btn">
+                            <i data-lucide="shopping-bag" style="width: 1.25rem; height: 1.25rem;"></i>
+                        </button>
+                    </div>
+                    <div class="product-details">
+                        <div class="product-meta">
+                            <span class="badge">Must Try</span>
+                            <div class="rating">
+                                <i data-lucide="star" style="width: 0.75rem; height: 0.75rem; fill: currentColor;"></i>
+                                <span class="rating-val">5.0</span>
+                            </div>
+                        </div>
+                        <h3 class="product-title">Pistachio Macaron</h3>
+                        <div class="price-row">
+                            <span class="price">$3.00</span>
+                            <button class="text-link-btn">
+                                <i class="fa-solid fa-cart-arrow-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Card 5 -->
+                <div class="product-card" style="transition-duration: 700ms;" data-delay="400">
+                    <div class="product-image-container bg-red">
+                        <span class="product-placeholder">Image</span>
+                        <button class="add-btn">
+                            <i data-lucide="shopping-bag" style="width: 1.25rem; height: 1.25rem;"></i>
+                        </button>
+                    </div>
+                    <div class="product-details">
+                        <div class="product-meta">
+                            <span class="badge">Classic</span>
+                            <div class="rating">
+                                <i data-lucide="star" style="width: 0.75rem; height: 0.75rem; fill: currentColor;"></i>
+                                <span class="rating-val">4.6</span>
+                            </div>
+                        </div>
+                        <h3 class="product-title">Red Velvet Cake</h3>
+                        <div class="price-row">
+                            <span class="price">$4.50</span>
+                            <button class="text-link-btn">
+                                <i class="fa-solid fa-cart-arrow-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Card 6 -->
+                <div class="product-card" style="transition-duration: 700ms;" data-delay="500">
+                    <div class="product-image-container bg-yellow">
+                        <span class="product-placeholder">Image</span>
+                        <button class="add-btn">
+                            <i data-lucide="shopping-bag" style="width: 1.25rem; height: 1.25rem;"></i>
+                        </button>
+                    </div>
+                    <div class="product-details">
+                        <div class="product-meta">
+                            <span class="badge">Fresh</span>
+                            <div class="rating">
+                                <i data-lucide="star" style="width: 0.75rem; height: 0.75rem; fill: currentColor;"></i>
+                                <span class="rating-val">4.8</span>
+                            </div>
+                        </div>
+                        <h3 class="product-title">Blueberry Muffin</h3>
+                        <div class="price-row">
+                            <span class="price">$3.50</span>
+                            <button class="text-link-btn">
+                                <i class="fa-solid fa-cart-arrow-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Card 7 -->
+                <div class="product-card" style="transition-duration: 700ms;" data-delay="600">
+                    <div class="product-image-container bg-amber">
+                        <span class="product-placeholder">Image</span>
+                        <button class="add-btn">
+                            <i data-lucide="shopping-bag" style="width: 1.25rem; height: 1.25rem;"></i>
+                        </button>
+                    </div>
+                    <div class="product-details">
+                        <div class="product-meta">
+                            <span class="badge">Warm</span>
+                            <div class="rating">
+                                <i data-lucide="star" style="width: 0.75rem; height: 0.75rem; fill: currentColor;"></i>
+                                <span class="rating-val">4.9</span>
+                            </div>
+                        </div>
+                        <h3 class="product-title">Cinnamon Roll</h3>
+                        <div class="price-row">
+                            <span class="price">$4.00</span>
+                            <button class="text-link-btn">
+                                <i class="fa-solid fa-cart-arrow-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Card 8 -->
+                <div class="product-card" style="transition-duration: 700ms;" data-delay="700">
+                    <div class="product-image-container bg-green">
+                        <span class="product-placeholder">Image</span>
+                        <button class="add-btn">
+                            <i data-lucide="shopping-bag" style="width: 1.25rem; height: 1.25rem;"></i>
+                        </button>
+                    </div>
+                    <div class="product-details">
+                        <div class="product-meta">
+                            <span class="badge">Flaky</span>
+                            <div class="rating">
+                                <i data-lucide="star" style="width: 0.75rem; height: 0.75rem; fill: currentColor;"></i>
+                                <span class="rating-val">4.7</span>
+                            </div>
+                        </div>
+                        <h3 class="product-title">Fruit Danish</h3>
+                        <div class="price-row">
+                            <span class="price">$5.00</span>
+                            <button class="text-link-btn">
+                                <i class="fa-solid fa-cart-arrow-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="product-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProductModal()">
+                <i data-lucide="x" style="width: 1.25rem; height: 1.25rem;"></i>
+            </button>
+            <div class="modal-body">
+                <div class="modal-image" id="modal-image">
+                    <div class="modal-image-placeholder">🧁</div>
+                </div>
+                <div class="modal-details">
+                    <span class="modal-badge" id="modal-badge">Top Seller</span>
+                    <h2 class="modal-title" id="modal-title">Product Name</h2>
+                    <div class="modal-price" id="modal-price">$4.50</div>
+                    <p class="modal-description" id="modal-description">
+                        Indulge in this freshly baked delight, crafted with premium ingredients and traditional
+                        techniques. Perfect for any occasion, this treat combines elegance with exceptional flavor.
+                    </p>
+                    <div class="modal-features">
+                        <div class="feature-item">
+                            <i data-lucide="check-circle" class="feature-icon"></i>
+                            <span>Freshly Baked Daily</span>
+                        </div>
+                        <div class="feature-item">
+                            <i data-lucide="check-circle" class="feature-icon"></i>
+                            <span>Premium Ingredients</span>
+                        </div>
+                        <div class="feature-item">
+                            <i data-lucide="check-circle" class="feature-icon"></i>
+                            <span>Handcrafted with Love</span>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="modal-add-to-cart" onclick="addToCartFromModal()">
+                            <i data-lucide="shopping-bag" style="width: 1.25rem; height: 1.25rem;"></i>
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Brand -->
+                <div class="footer-col">
+                    <h3>Pastry Home</h3>
+                    <p class="footer-text">
+                        Crafting sweet memories, one pastry at a time. Join us in our journey of flavor and passion.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="index.html#about">About Us</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="footer-col">
+                    <h4>Stay Sweet</h4>
+                    <p class="footer-text">Subscribe to our newsletter for exclusive offers.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your email address" class="input-field">
+                        <button class="btn-submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Pastry Home by Layo. All rights reserved.</p>
+                <p class="flex items-center gap-1 mt-4 md:mt-0">
+                    Made with <i data-lucide="heart"
+                        style="width: 0.75rem; height: 0.75rem; color: var(--color-primary); fill: var(--color-primary);"></i>
+                    by Layo
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./js/main.js"></script>
+    <script>
+        // Update cart count from localStorage
+        const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+        document.querySelector('.cart-count').textContent = cartItems.length;
+
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
