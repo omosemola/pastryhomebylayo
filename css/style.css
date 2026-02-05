@@ -765,7 +765,109 @@ button {
 }
 
 /* =========================================
-   5. Gallery Section
+   5. Shop Banner Hero
+   ========================================= */
+.shop-banner-hero {
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.shop-banner-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.shop-banner-hero .navbar {
+  position: relative;
+  z-index: 10;
+  background: transparent;
+}
+
+.navbar-transparent {
+  background: rgba(27, 77, 62, 0.6);
+  backdrop-filter: blur(10px);
+}
+
+.navbar-transparent .nav-link {
+  color: white;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-transparent .nav-link:hover {
+  color: var(--color-primary);
+}
+
+.shop-banner-content {
+  position: relative;
+  z-index: 5;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 0 3rem;
+  text-align: center;
+}
+
+.shop-banner-content .section-header {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  padding: 3rem 2rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.banner-title {
+  color: white;
+  font-size: 3.5rem;
+  font-weight: 800;
+  text-shadow: 0 3px 15px rgba(0, 0, 0, 0.5);
+  letter-spacing: -0.02em;
+  margin: 0.5rem 0;
+}
+
+.banner-description {
+  color: rgba(255, 255, 255, 1);
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.shop-banner-content .hero-subtitle {
+  color: var(--accent-gold);
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 768px) {
+  .shop-banner-hero {
+    min-height: 400px;
+  }
+
+  .banner-title {
+    font-size: 2rem;
+  }
+}
+
+/* =========================================
+   6. Gallery Section
    ========================================= */
 .section-gallery {
   background-color: var(--color-accent);

@@ -1,12 +1,29 @@
 {
+  "name": "pastryhomebylayo-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Pastry Home by Layo e-commerce website",
+  "main": "server.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js"
+  },
+  "keywords": [
+    "ecommerce",
+    "pastry",
+    "api",
+    "express",
+    "mongodb"
+  ],
+  "author": "Pastry Home by Layo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^8.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.2"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.1.18",
-    "tailwindcss": "^4.1.18"
+    "nodemon": "^3.0.2"
   }
 }
