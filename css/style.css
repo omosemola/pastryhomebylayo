@@ -577,6 +577,7 @@ button {
   transition: all 1s ease-out;
 }
 
+
 /* Update text colors for dark background */
 .hero-subtitle {
   display: block;
@@ -588,6 +589,33 @@ button {
   margin-bottom: 1.5rem;
   text-transform: uppercase;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Mobile Hero Video */
+.hero-video-mobile {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -1;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  opacity: 0.7;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    background-image: none !important;
+    overflow: hidden;
+  }
+
+  .hero-video-mobile {
+    display: block;
+  }
 }
 
 .hero-title {
