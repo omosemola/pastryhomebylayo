@@ -38,37 +38,49 @@ window.addEventListener('scroll', () => {
     }
 });
 
+
 // --- Mobile Menu Logic ---
 const closeMenuBtn = document.getElementById('close-menu-btn');
 
 function toggleMenu() {
-    mobileMenu.classList.toggle('active');
-    document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    if (mobileMenu) {
+        mobileMenu.classList.toggle('active');
+        document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    }
 }
 
-mobileMenuBtn.addEventListener('click', toggleMenu);
+if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', toggleMenu);
+}
 
 if (closeMenuBtn) {
     closeMenuBtn.addEventListener('click', toggleMenu);
 }
 
 // Close when clicking outside (backdrop)
-mobileMenu.addEventListener('click', (e) => {
-    if (e.target === mobileMenu) {
-        toggleMenu();
-    }
-});
-
-mobileLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        if (mobileMenu.classList.contains('active')) {
+if (mobileMenu) {
+    mobileMenu.addEventListener('click', (e) => {
+        if (e.target === mobileMenu) {
             toggleMenu();
         }
     });
-});
+}
+
+
+if (mobileLinks && mobileLinks.length > 0) {
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (mobileMenu && mobileMenu.classList.contains('active')) {
+                toggleMenu();
+            }
+        });
+    });
+}
+
 
 // --- Cart Logic ---
 const cartItemsContainer = document.getElementById('cart-items');
+const cartPageContainer = document.getElementById('cart-content');
 const cartTotalPriceEl = document.getElementById('cart-total-price');
 
 let cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
@@ -86,36 +98,85 @@ function updateCartUI() {
     renderCartItems();
 }
 
-function renderCartItems() {
+
+function renderCartItems_OLD() {
+    if (!cartItemsContainer) return;
     cartItemsContainer.innerHTML = '';
+
     let total = 0;
 
     if (cartItems.length === 0) {
-        cartItemsContainer.innerHTML = '<div class="empty-cart-msg">Your bag is empty.</div>';
+        cartItemsContainer.innerHTML = `
+            <div class="empty-cart-msg">
+                <i data-lucide="shopping-bag" style="width: 48px; height: 48px; margin-bottom: 1rem; color: var(--color-gray-400);"></i>
+                <p>Your bag is empty.</p>
+                <a href="shop.html" class="btn btn-primary" style="margin-top: 1rem; display: inline-block;">Continue Shopping</a>
+            </div>
+        `;
+        if (window.lucide) lucide.createIcons();
     } else {
-        cartItems.forEach(item => {
-            total += parseFloat(item.price.replace('$', ''));
+        // Header with Clear Cart
+        const headerEl = document.createElement('div');
+        headerEl.className = 'cart-header';
+        headerEl.innerHTML = `
+            <h2>Your Items (${cartItems.length})</h2>
+            <button onclick="clearCart()" class="clear-cart-btn">Remove All Items</button>
+        `;
+        cartItemsContainer.appendChild(headerEl);
+
+        // Cart Items Grid
+        const gridEl = document.createElement('div');
+        gridEl.className = 'cart-grid';
+
+        cartItems.forEach((item, index) => {
+            const priceVal = parseFloat(item.price.replace(/[^0-9.]/g, ''));
+            total += priceVal;
 
             const itemEl = document.createElement('div');
             itemEl.className = 'cart-item';
+
+            // Handle image rendering safely
+            let imageContent = item.image;
+            if (!imageContent || imageContent === '🧁') {
+                imageContent = `<div class="cart-placeholder" style="background-color: ${item.color || '#f3f4f6'}">🧁</div>`;
+            } else {
+                // Ensure image spans container
+                imageContent = `<div class="cart-img-wrapper">${item.image}</div>`;
+            }
+
             itemEl.innerHTML = `
-                <div class="cart-item-img" style="background-color: ${item.color};">
-                    ${item.image}
-                </div>
+                ${imageContent}
                 <div class="cart-item-details">
-                    <div class="cart-item-title">${item.title}</div>
+                    <h3 class="cart-item-title">${item.title}</h3>
                     <div class="cart-item-price">${item.price}</div>
                 </div>
             `;
-            cartItemsContainer.appendChild(itemEl);
+            gridEl.appendChild(itemEl);
         });
+
+        cartItemsContainer.appendChild(gridEl);
     }
 
-    cartTotalPriceEl.textContent = '$' + total.toFixed(2);
+    if (cartTotalPriceEl) {
+        cartTotalPriceEl.textContent = '$' + total.toFixed(2);
+    }
 
     // Save to localStorage
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
 }
+
+function clearCart() {
+    if (confirm('Are you sure you want to remove all items?')) {
+        cartItems = []; // Clear array
+        renderCartItems(); // Re-render (will confirm empty state)
+        cartCount = 0;
+        updateCartUI(); // Update UI badge
+    }
+}
+
+// Make clearCart global
+window.clearCart = clearCart;
+
 
 // Initialize cart UI on page load
 renderCartItems();
@@ -123,6 +184,7 @@ renderCartItems();
 cartBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
         e.preventDefault();
+        e.stopPropagation(); // Prevent modal from opening
 
         // Find product details
         const card = btn.closest('.product-card');
@@ -131,7 +193,12 @@ cartBtns.forEach(btn => {
         const title = card.querySelector('.product-title').textContent;
         const price = card.querySelector('.price').textContent;
         const imageContainer = card.querySelector('.product-image-container');
-        const colorClass = Array.from(imageContainer.classList).find(c => c.startsWith('bg-'));
+        const colorClass = Array.from(imageContainer.classList).find(c => c.startsWith('bg-')) || 'bg-yellow';
+
+        // Get real image source
+        const imgEl = imageContainer.querySelector('img');
+        const imageSrc = imgEl ? imgEl.src : null;
+        const imageHtml = imageSrc ? `<img src="${imageSrc}" alt="${title}" style="width:100%; height:100%; object-fit:cover;">` : '🧁';
 
         const colorMap = {
             'bg-yellow': '#fef3c7',
@@ -145,7 +212,7 @@ cartBtns.forEach(btn => {
             title: title,
             price: price,
             color: colorMap[colorClass] || '#f3f4f6',
-            image: '🧁'
+            image: imageHtml
         });
 
         cartCount = cartItems.length;
@@ -153,11 +220,23 @@ cartBtns.forEach(btn => {
 
         // Visual Feedback on Button
         const target = e.currentTarget;
-        if (target.classList.contains('text-link-btn')) {
-            const originalText = target.textContent;
-            target.textContent = "Added!";
-            setTimeout(() => { target.textContent = originalText; }, 1000);
-        }
+
+        // Store original content (icon)
+        const originalContent = target.innerHTML;
+
+        // Change to "Added!"
+        target.textContent = "Added!";
+        target.classList.add('added-feedback'); // Optional class for styling if needed
+
+        // Revert back to icon after 1 second
+        setTimeout(() => {
+            target.innerHTML = originalContent;
+            target.classList.remove('added-feedback');
+            // If using Lucide icons, they might need refreshing if they were raw SVG, 
+            // but innerHTML restore usually works for static SVG. 
+            // If they are <i data-lucide> tags, we might need lucide.createIcons()
+            // But since we restored the generated SVG, it should be fine.
+        }, 1000);
 
         target.style.transform = 'scale(0.95)';
         setTimeout(() => {
@@ -329,36 +408,57 @@ window.addEventListener('resize', updateSlider);
 
 // Init
 initSlider();
+updateCartUI();
 
 // --- Product Modal Logic ---
 let currentModalProduct = null;
 
 function openProductModal(productCard) {
     const modal = document.getElementById('product-modal');
-    const title = productCard.querySelector('.product-title').textContent;
-    const price = productCard.querySelector('.price').textContent;
-    const badge = productCard.querySelector('.badge').textContent;
+    if (!modal) return;
+
+    // Safely get content
+    const titleEl = productCard.querySelector('.product-title');
+    const priceEl = productCard.querySelector('.price');
+    const badgeEl = productCard.querySelector('.badge');
     const imageContainer = productCard.querySelector('.product-image-container');
-    const colorClass = Array.from(imageContainer.classList).find(c => c.startsWith('bg-'));
+
+    const title = titleEl ? titleEl.textContent : 'Delicious Pastry';
+    const price = priceEl ? priceEl.textContent : '';
+    const badge = badgeEl ? badgeEl.textContent : '';
+
+    const colorClass = imageContainer
+        ? (Array.from(imageContainer.classList).find(c => c.startsWith('bg-')) || 'bg-yellow')
+        : 'bg-yellow';
 
     // Get product image if it exists
-    const productImg = imageContainer.querySelector('img');
+    const productImg = imageContainer ? imageContainer.querySelector('img') : null;
     const productImageSrc = productImg ? productImg.src : null;
 
     // Update modal content
-    document.getElementById('modal-title').textContent = title;
-    document.getElementById('modal-price').textContent = price;
-    document.getElementById('modal-badge').textContent = badge;
-
-    // Update modal image
+    const modalTitleEl = document.getElementById('modal-title');
+    const modalPriceEl = document.getElementById('modal-price');
+    const modalBadgeEl = document.getElementById('modal-badge');
     const modalImage = document.getElementById('modal-image');
-    modalImage.className = `modal-image ${colorClass}`;
 
-    // Add product image to modal if it exists
-    if (productImageSrc) {
-        modalImage.innerHTML = `<img src="${productImageSrc}" alt="${title}">`;
-    } else {
-        modalImage.innerHTML = '<div class="modal-image-placeholder">🧁</div>';
+    if (modalTitleEl) modalTitleEl.textContent = title;
+    if (modalPriceEl) modalPriceEl.textContent = price;
+
+    if (modalBadgeEl) {
+        modalBadgeEl.textContent = badge;
+        modalBadgeEl.style.display = badge ? 'inline-block' : 'none';
+    }
+
+    // Update modal image background
+    if (modalImage) {
+        modalImage.className = `modal-image ${colorClass}`;
+
+        // Add product image to modal if it exists
+        if (productImageSrc) {
+            modalImage.innerHTML = `<img src="${productImageSrc}" alt="${title}">`;
+        } else {
+            modalImage.innerHTML = '<div class="modal-image-placeholder">🧁</div>';
+        }
     }
 
     // Store current product data
@@ -374,8 +474,11 @@ function openProductModal(productCard) {
     modal.classList.remove('closing');
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
+
     // Recreate icons
-    setTimeout(() => lucide.createIcons(), 0);
+    if (window.lucide) {
+        setTimeout(() => lucide.createIcons(), 0);
+    }
 }
 
 function closeProductModal() {
@@ -418,25 +521,149 @@ function addToCartFromModal() {
 }
 
 // Close modal on backdrop click
-document.getElementById('product-modal')?.addEventListener('click', (e) => {
-    if (e.target.id === 'product-modal') {
-        closeProductModal();
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('product-modal');
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target.id === 'product-modal') {
+                closeProductModal();
+            }
+        });
     }
-});
 
-// Add click handlers to product cards
-document.querySelectorAll('.product-card').forEach(card => {
-    card.style.cursor = 'pointer';
+    // Add click handlers to product cards (Standard loop as per homepage)
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.style.cursor = 'pointer';
 
-    card.addEventListener('click', (e) => {
-        // Don't open modal if clicking add to cart buttons
-        if (e.target.closest('.add-btn') || e.target.closest('.text-link-btn')) {
-            return;
-        }
-        openProductModal(card);
+        card.addEventListener('click', (e) => {
+            // Don't open modal if clicking add to cart buttons
+            if (e.target.closest('.add-btn') || e.target.closest('.text-link-btn')) {
+                return;
+            }
+            openProductModal(card);
+        });
     });
 });
 
-// Make functions global for onclick attributes
+// Make functions global for onclick attributes (Close/AddToCart only)
 window.closeProductModal = closeProductModal;
 window.addToCartFromModal = addToCartFromModal;
+
+// Parallax Effect for Shop Banner
+document.addEventListener('DOMContentLoaded', () => {
+    const shopBanner = document.querySelector('.shop-banner-hero');
+    if (shopBanner) {
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const bannerBg = shopBanner.querySelector('.shop-banner-bg');
+            const bannerContent = shopBanner.querySelector('.shop-banner-content');
+
+            if (bannerBg) {
+                // Keep scale(1.1) to avoid white edges during scroll
+                bannerBg.style.transform = `scale(1.1) translateY(${scrolled * 0.4}px)`;
+            }
+
+            if (bannerContent) {
+                bannerContent.style.transform = `translateY(${scrolled * 0.15}px)`;
+                bannerContent.style.opacity = Math.max(0, 1 - (scrolled * 0.003));
+            }
+        });
+    }
+});
+
+// --- New Render Logic (Added to fix cart page rendering) ---
+function renderCartItems() {
+    // 1. Handle Sidebar/Header Cart
+    if (cartItemsContainer) {
+        cartItemsContainer.innerHTML = '';
+        if (cartItems.length === 0) {
+            cartItemsContainer.innerHTML = '<div class="empty-cart-msg">Your bag is empty.</div>';
+        } else {
+            cartItems.forEach(item => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'cart-item-sidebar';
+                itemEl.innerHTML = `
+                    <div style="font-weight: bold;">${item.title}</div>
+                    <div>${item.price}</div>
+                `;
+                cartItemsContainer.appendChild(itemEl);
+            });
+        }
+    }
+
+    // 2. Handle Main Cart Page
+    if (cartPageContainer) {
+        cartPageContainer.innerHTML = '';
+        let total = 0;
+
+        if (cartItems.length === 0) {
+            cartPageContainer.innerHTML = `
+                <div class="empty-cart-msg">
+                    <i data-lucide="shopping-bag" style="width: 48px; height: 48px; margin-bottom: 1rem; color: var(--color-gray-400);"></i>
+                    <p>Your bag is empty.</p>
+                    <a href="shop.html" class="btn btn-primary" style="margin-top: 1rem; display: inline-block;">Continue Shopping</a>
+                </div>
+            `;
+        } else {
+            // Header
+            const headerEl = document.createElement('div');
+            headerEl.className = 'cart-header';
+            headerEl.innerHTML = `
+                <h2>Your Items (${cartItems.length})</h2>
+                <button onclick="clearCart()" class="clear-cart-btn">Remove All Items</button>
+            `;
+            cartPageContainer.appendChild(headerEl);
+
+            // Grid
+            const gridEl = document.createElement('div');
+            gridEl.className = 'cart-grid';
+
+            cartItems.forEach((item, index) => {
+                const priceVal = parseFloat(item.price.replace(/[^0-9.]/g, ''));
+                total += priceVal;
+
+                const itemEl = document.createElement('div');
+                itemEl.className = 'cart-item';
+
+                let imageContent = item.image;
+                if (!imageContent || imageContent === '🧁') {
+                    imageContent = `<div class="cart-placeholder" style="background-color: ${item.color || '#f3f4f6'}">🧁</div>`;
+                } else {
+                    imageContent = `<div class="cart-img-wrapper">${item.image}</div>`;
+                }
+
+                itemEl.innerHTML = `
+                    ${imageContent}
+                    <div class="cart-item-details">
+                        <h3 class="cart-item-title">${item.title}</h3>
+                        <div class="cart-item-price">${item.price}</div>
+                    </div>
+                     <button onclick="removeItem(${index})" class="remove-btn" style="padding: 0.5rem; color: #dc2626; background: none; border: none; cursor: pointer;">
+                        <i data-lucide="trash-2" style="width: 1.25rem; height: 1.25rem;"></i>
+                    </button>
+                `;
+                gridEl.appendChild(itemEl);
+            });
+            cartPageContainer.appendChild(gridEl);
+
+            // Total
+            const totalEl = document.createElement('div');
+            totalEl.style.marginTop = "2rem";
+            totalEl.style.textAlign = "right";
+            totalEl.innerHTML = `
+                <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">Total: $${total.toFixed(2)}</div>
+                <a href="checkout.html" class="btn btn-primary" style="padding: 1rem 2rem; display: inline-block;">Proceed to Checkout</a>
+             `;
+            cartPageContainer.appendChild(totalEl);
+        }
+
+        if (window.lucide) lucide.createIcons();
+    }
+
+    if (cartTotalPriceEl) {
+        const total = cartItems.reduce((sum, item) => sum + parseFloat(item.price.replace(/[^0-9.]/g, '')), 0);
+        cartTotalPriceEl.textContent = '$' + total.toFixed(2);
+    }
+
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+}
