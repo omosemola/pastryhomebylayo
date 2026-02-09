@@ -207,6 +207,21 @@ button {
   /* Dark text on white scrolled header */
 }
 
+/* Mobile/Cart Icons Color Logic */
+.navbar .cart-btn,
+.navbar .mobile-menu-btn {
+  color: white;
+  /* Default white on transparent header */
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.navbar.scrolled .cart-btn,
+.navbar.scrolled .mobile-menu-btn {
+  color: var(--color-secondary);
+  /* Dark on white scrolled header */
+  border-color: var(--color-gray-100);
+}
+
 .nav-link::after {
   content: '';
   position: absolute;
@@ -1608,14 +1623,55 @@ button {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
+  grid-template-columns: 1fr 1fr;
+  /* 2 columns for mobile */
+  gap: 2rem;
   margin-bottom: 4rem;
+  text-align: center;
+}
+
+/* Mobile Specifics */
+/* Brand spans full width */
+.footer-col:nth-child(1) {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Quick Links & Support side-by-side (natural flow) */
+.footer-col:nth-child(2),
+.footer-col:nth-child(3) {
+  text-align: left;
+  padding-left: 0.5rem;
+}
+
+/* Newsletter spans full width */
+.footer-col:nth-child(4) {
+  grid-column: 1 / -1;
+  margin-top: 1rem;
 }
 
 @media (min-width: 768px) {
   .footer-grid {
     grid-template-columns: repeat(4, 1fr);
+    text-align: left;
+  }
+
+  /* Reset Mobile Overrides */
+  .footer-col:nth-child(1) {
+    grid-column: auto;
+    align-items: flex-start;
+  }
+
+  .footer-col:nth-child(4) {
+    grid-column: auto;
+    margin-top: 0;
+  }
+
+  .footer-col:nth-child(2),
+  .footer-col:nth-child(3) {
+    padding-left: 0;
   }
 }
 
@@ -1642,6 +1698,14 @@ button {
 .social-links {
   display: flex;
   gap: 1rem;
+  justify-content: center;
+  /* Center on mobile */
+}
+
+@media (min-width: 768px) {
+  .social-links {
+    justify-content: flex-start;
+  }
 }
 
 .social-icon {
@@ -1675,29 +1739,66 @@ button {
 
 .newsletter-form {
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.input-field {
+  align-items: center;
   background: rgba(255, 255, 255, 0.05);
+  /* Glass effect background */
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.5rem;
-  padding: 0.75rem 1rem;
-  color: white;
-  outline: none;
+  padding: 0.35rem;
+  border-radius: 3rem;
+  /* Pill shape */
+  margin-top: 1rem;
 }
 
-.input-field:focus {
-  border-color: var(--color-primary);
+.newsletter-form input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  outline: none;
+  font-size: 0.9rem;
+  min-width: 0;
+  /* Fix flex overflow */
+}
+
+.newsletter-form input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.newsletter-form button {
+  background: var(--color-primary);
+  color: var(--color-secondary);
+  border: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  flex-shrink: 0;
+}
+
+.newsletter-form button:hover {
+  transform: scale(1.1);
+  background: white;
+  color: var(--color-secondary);
+}
+
+.newsletter-form button i,
+.newsletter-form button svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+/* Legacy classes kept if used elsewhere, generally safe to ignore for footer lookup */
+.input-field {
+  display: none;
 }
 
 .btn-submit {
-  background: var(--color-primary);
-  color: var(--color-secondary);
-  font-weight: 700;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
+  display: none;
 }
 
 .footer-bottom {
@@ -2366,5 +2467,452 @@ button {
   .product-grid {
     gap: 1.5rem;
     /* Slightly reduced gap from 2rem to give more width to cards */
+  }
+}
+
+/* =========================================
+   About Page Specific Styles
+   ========================================= */
+
+/* Hero Overrides */
+.about-hero {
+  min-height: 40vh !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  background-attachment: fixed;
+  background-position: center;
+  /* Center the background */
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  /* Dark placeholder if image loads slowly */
+  background-color: var(--color-gray-900);
+}
+
+.about-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
+  z-index: 1;
+}
+
+.about-hero .banner-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  padding: 0 1rem;
+}
+
+.about-hero .banner-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  font-family: var(--font-display);
+}
+
+.about-hero .banner-subtitle {
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.9;
+  font-family: var(--font-serif);
+}
+
+/* About Section Typography */
+.section-about h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: inline-block;
+}
+
+.section-about h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--color-secondary);
+}
+
+.about-text-content {
+  font-size: 1.15rem;
+  line-height: 1.9;
+  color: var(--color-gray-700);
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+/* Values Section Cards */
+.value-card {
+  background: white;
+  padding: 3rem 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.value-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-primary-light);
+}
+
+.value-icon-wrapper {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  /* Make sure accent color exists or uses fallback */
+  background-color: #fef3c7;
+  /* Fallback to light yellow */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  color: var(--color-secondary);
+}
+
+.value-card:hover .value-icon-wrapper {
+  background: var(--color-secondary);
+  color: white;
+  transform: rotateY(180deg) scale(1.1);
+}
+
+.value-icon-wrapper i,
+.value-icon-wrapper svg {
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+}
+
+.value-title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--color-gray-900);
+}
+
+.value-text {
+  color: var(--color-gray-600);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* =========================================
+   Contact Page Specific Styles
+   ========================================= */
+
+/* Reuse About Hero base but override image */
+.contact-hero {
+  border-bottom: none;
+  background-image: url('../assets/contact-hero.jpg');
+  background-position: center top !important;
+  background-attachment: scroll !important;
+  position: relative;
+  z-index: 1;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  min-height: 50vh;
+  /* Ensure enough height */
+}
+
+.contact-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  /* Slightly lighter overlay */
+  z-index: -1;
+}
+
+.contact-hero .banner-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+}
+
+.contact-hero .banner-subtitle {
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.95;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-family: var(--font-serif);
+  color: white;
+  /* Explicitly set color */
+}
+
+/* Contact Info Icons */
+.contact-icon-wrapper {
+  width: 4.5rem;
+  /* Larger, more premium */
+  height: 4.5rem;
+  border-radius: 50%;
+  background: white;
+  /* Clean white background */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  /* Soft shadow */
+  border: 1px solid var(--color-gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-secondary);
+  /* Secondary color for elegance */
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.contact-item:hover .contact-icon-wrapper {
+  background: var(--color-secondary);
+  color: white;
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.contact-icon-wrapper svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  /* Vertically center aligned */
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  transition: background-color 0.3s;
+}
+
+.contact-item:hover {
+  background-color: var(--color-gray-50);
+}
+
+/* Spacing for "Let's Talk Cake" Heading */
+.contact-heading-wrapper {
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Contact Form Enhancements */
+.contact-form-container {
+  background: white;
+  padding: 3rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  /* Deeper shadow */
+  border: 1px solid var(--color-gray-200);
+}
+
+.contact-input {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border: 1px solid #6b7280;
+  /* Darker border (gray-500) */
+  border-radius: 0.75rem;
+  background-color: white;
+  transition: all 0.3s;
+  outline: none;
+  font-size: 1rem;
+  color: var(--color-gray-800);
+  margin-bottom: 1rem;
+  /* Added margin bottom */
+}
+
+.contact-input:focus {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(var(--color-secondary-rgb, 12, 12, 12), 0.1);
+  transform: translateY(-1px);
+}
+
+.contact-input::placeholder {
+  color: var(--color-gray-500);
+}
+
+.contact-label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--color-secondary);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.contact-submit-btn {
+  width: 100%;
+  padding: 1.1rem;
+  background: var(--color-secondary);
+  color: white;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+}
+
+.contact-submit-btn:hover {
+  background: var(--color-primary);
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.3);
+}
+
+/* Map Placeholder Polish */
+.map-placeholder {
+  min-height: 450px;
+  background-color: var(--color-gray-100);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-placeholder::before {
+  /* Simple grid pattern to look technical like a map */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(var(--color-gray-200) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-gray-200) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.5;
+}
+
+.map-pin {
+  width: 60px;
+  height: 60px;
+  color: var(--color-secondary);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+  z-index: 10;
+  animation: bounce 2s infinite ease-in-out;
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+
+/* Contact Social Icons (Image Based) */
+.social-img-link {
+  display: block;
+  width: 4rem;
+  height: 4rem;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: grayscale(20%);
+  /* Slight mute */
+}
+
+.social-img-link img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+  transition: all 0.4s ease;
+}
+
+.social-img-link:hover {
+  transform: translateY(-8px) scale(1.15);
+  filter: grayscale(0%);
+}
+
+.social-img-link:hover img {
+  filter: drop-shadow(0 15px 20px rgba(0, 0, 0, 0.2));
+}
+
+/* =========================================
+   Floating WhatsApp Button
+   ========================================= */
+@keyframes localizedBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.whatsapp-float {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: linear-gradient(135deg, #25D366, #20bd5a);
+  color: white;
+  padding: 0.6rem 1.2rem; /* Smaller padding */
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Tighter gap */
+  z-index: 9999;
+  font-weight: 600;
+  font-size: 0.9rem; /* Smaller font */
+  text-decoration: none;
+  font-family: var(--font-sans);
+  border: 2px solid white;
+  animation: localizedBounce 3s infinite ease-in-out; /* Bouncing animation */
+  transition: all 0.3s ease;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.05); /* Slight grow on hover */
+  animation: none; /* Pause bounce on hover */
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+}
+
+.whatsapp-float i {
+  font-size: 1.25rem; /* Smaller icon */
+}
+
+@media (max-width: 768px) {
+  .whatsapp-float {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
   }
 }

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Pastry Home by Layo</title>
+    <link href="./css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Sticky Navbar -->
+    <nav id="navbar" class="navbar">
+        <div class="container flex items-center justify-between">
+            <!-- Logo -->
+            <a href="index.html" class="logo">
+                <img src="./assets/logo.png" alt="Pastry Home by Layo">
+            </a>
+
+            <!-- Desktop Nav -->
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="shop.html" class="nav-link">Shop</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="contact.html" class="nav-link active">Contact</a>
+            </div>
+
+            <!-- Icons -->
+            <div class="flex items-center gap-4">
+                <a href="cart.html" class="cart-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-shopping-cart-icon lucide-shopping-cart">
+                        <circle cx="8" cy="21" r="1" />
+                        <circle cx="19" cy="21" r="1" />
+                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+                    </svg>
+                    <span class="cart-count">0</span>
+                </a>
+
+                <!-- Mobile Toggle -->
+                <button id="mobile-menu-btn" class="mobile-menu-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-square-menu-icon lucide-square-menu">
+                        <rect width="18" height="18" x="3" y="3" rx="2" />
+                        <path d="M7 8h10" />
+                        <path d="M7 12h10" />
+                        <path d="M7 16h10" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu">
+            <div class="mobile-menu-inner">
+                <button id="close-menu-btn" class="close-btn">
+                    <i data-lucide="x"></i>
+                </button>
+                <a href="index.html" class="mobile-link">Home</a>
+                <a href="shop.html" class="mobile-link">Shop</a>
+                <a href="about.html" class="mobile-link">About</a>
+                <a href="contact.html" class="mobile-link active">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <!-- Page Header -->
+    <header class="shop-banner-hero contact-hero">
+        <div class="banner-content text-center">
+            <h1 class="banner-title text-white reveal-on-scroll">Get in Touch</h1>
+            <p class="banner-subtitle text-white reveal-on-scroll" data-delay="100">We'd love to hear from you</p>
+        </div>
+    </header>
+
+    <!-- Contact Section -->
+    <section class="section-contact py-16">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Info -->
+                <div class="reveal-on-scroll">
+                    <h2 class="text-3xl font-serif font-bold text-secondary contact-heading-wrapper">Let's Talk Cake!
+                    </h2>
+                    <p class="text-gray-600 mb-8 leading-relaxed">
+                        Have a custom order in mind? Want to know more about our ingredients? Or just want to say hi?
+                        Fill out the form or reach out to us directly!
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="contact-item">
+                            <div class="contact-icon-wrapper">
+                                <i data-lucide="map-pin"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-secondary text-lg">Our Kitchen</h4>
+                                <p class="text-gray-600">123 Bakery Street, Sweet Town, Lagos, Nigeria</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon-wrapper">
+                                <i data-lucide="phone"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-secondary text-lg">Phone</h4>
+                                <p class="text-gray-600">+234 123 456 7890</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon-wrapper">
+                                <i data-lucide="mail"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-secondary text-lg">Email</h4>
+                                <p class="text-gray-600">hello@pastryhomebylayo.com</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Socials -->
+                    <!-- Socials -->
+                    <div class="text-center" style="margin-top: 100px; margin-bottom: 100px;">
+                        <h4 class="font-bold text-secondary mb-8 contact-heading-wrapper" style="margin-top: 0;">Follow
+                            Us</h4>
+                        <div class="flex gap-4 justify-center items-center">
+                            <a href="#" class="social-img-link">
+                                <img src="./assets/social icons/instagram.webp" alt="Instagram">
+                            </a>
+                            <a href="#" class="social-img-link">
+                                <img src="./assets/social icons/facebook.webp" alt="Facebook">
+                            </a>
+                            <a href="#" class="social-img-link">
+                                <img src="./assets/social icons/twitterx.jpg" alt="X (Twitter)"
+                                    style="border-radius: 50%; object-fit: cover;">
+                            </a>
+                            <a href="#" class="social-img-link">
+                                <img src="./assets/social icons/tiktok.webp" alt="TikTok">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <div class="contact-form-container reveal-on-scroll" data-delay="200">
+                    <form class="space-y-5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="contact-label">Name</label>
+                                <input type="text" class="contact-input" placeholder="John Doe">
+                            </div>
+                            <div>
+                                <label class="contact-label">Email</label>
+                                <input type="email" class="contact-input" placeholder="john@example.com">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="contact-label">Subject</label>
+                            <input type="text" class="contact-input" placeholder="Custom Order Inquiry">
+                        </div>
+                        <div>
+                            <label class="contact-label">Message</label>
+                            <textarea rows="4" class="contact-input"
+                                placeholder="How can we make your day sweeter?"></textarea>
+                        </div>
+                        <button type="button" class="contact-submit-btn">
+                            Send Message <i data-lucide="send" style="width: 1rem; height: 1rem;"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Placeholder -->
+    <section class="reveal-on-scroll">
+        <div class="map-placeholder">
+            <i data-lucide="map-pin" class="map-pin"></i>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Brand -->
+                <div class="footer-col reveal-on-scroll">
+                    <h3>Pastry Home</h3>
+                    <p class="footer-text">
+                        Crafting sweet memories, one pastry at a time. Join us in our journey of flavor and passion.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon"><i data-lucide="instagram"></i></a>
+                        <a href="#" class="social-icon"><i data-lucide="facebook"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-col reveal-on-scroll" data-delay="100">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div class="footer-col reveal-on-scroll" data-delay="200">
+                    <h4>Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="footer-col reveal-on-scroll" data-delay="300">
+                    <h4>Newsletter</h4>
+                    <p class="footer-text">Subscribe for sweet updates and exclusive offers.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your email address">
+                        <button type="submit">
+                            <i data-lucide="send"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Pastry Home by Layo. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./js/main.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

@@ -30,3 +30,6 @@ replace_icons.ps1
 
 # Gemini/Antigravity artifacts
 .gemini/
+
+# Backup files
+*.bak
