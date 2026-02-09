@@ -442,7 +442,15 @@ function openProductModal(productCard) {
     const modalImage = document.getElementById('modal-image');
 
     if (modalTitleEl) modalTitleEl.textContent = title;
-    if (modalPriceEl) modalPriceEl.textContent = price;
+
+    // Reset Size to Small and update price
+    const smallRadio = document.querySelector('input[name="modal-size"][value="small"]');
+    if (smallRadio) {
+        smallRadio.checked = true;
+        if (window.updateModalPrice) window.updateModalPrice();
+    } else {
+        if (modalPriceEl) modalPriceEl.textContent = price.replace('$', '₦');
+    }
 
     if (modalBadgeEl) {
         modalBadgeEl.textContent = badge;
@@ -505,12 +513,18 @@ function addToCartFromModal() {
         'bg-green': '#dcfce7'
     };
 
+    // Determine Size and Price
+    const sizeRadio = document.querySelector('input[name="modal-size"]:checked');
+    const size = sizeRadio ? sizeRadio.value : 'small';
+    const finalPrice = size === 'small' ? '₦2,500' : '₦9,500';
+    const titleWithSize = `${currentModalProduct.title} (${size.charAt(0).toUpperCase() + size.slice(1)})`;
+
     // Add to cart
     cartItems.push({
-        title: currentModalProduct.title,
-        price: currentModalProduct.price,
+        title: titleWithSize,
+        price: finalPrice,
         color: colorMap[currentModalProduct.colorClass] || '#f3f4f6',
-        image: '🧁'
+        image: currentModalProduct.imageSrc ? `<img src="${currentModalProduct.imageSrc}" alt="${currentModalProduct.title}" style="width:100%; height:100%; object-fit:cover;">` : '🧁'
     });
 
     cartCount = cartItems.length;
@@ -548,6 +562,16 @@ document.addEventListener('DOMContentLoaded', () => {
 // Make functions global for onclick attributes (Close/AddToCart only)
 window.closeProductModal = closeProductModal;
 window.addToCartFromModal = addToCartFromModal;
+
+window.updateModalPrice = function () {
+    const sizeRadio = document.querySelector('input[name="modal-size"]:checked');
+    if (!sizeRadio) return;
+
+    const priceEl = document.getElementById('modal-price');
+    if (priceEl) {
+        priceEl.textContent = sizeRadio.value === 'small' ? '₦2,500' : '₦9,500';
+    }
+};
 
 // Parallax Effect for Shop Banner
 document.addEventListener('DOMContentLoaded', () => {

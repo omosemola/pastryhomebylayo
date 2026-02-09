@@ -393,11 +393,27 @@
                 <div class="modal-details">
                     <span class="modal-badge" id="modal-badge">Top Seller</span>
                     <h2 class="modal-title" id="modal-title">Product Name</h2>
-                    <div class="modal-price" id="modal-price">$4.50</div>
+                    <div class="modal-price" id="modal-price">₦2,500</div>
                     <p class="modal-description" id="modal-description">
                         Indulge in this freshly baked delight, crafted with premium ingredients and traditional
                         techniques. Perfect for any occasion, this treat combines elegance with exceptional flavor.
                     </p>
+
+                    <!-- Size Selector -->
+                    <div class="modal-size-selector">
+                        <span class="size-label">Size:</span>
+                        <div class="size-options">
+                            <label class="size-option">
+                                <input type="radio" name="modal-size" value="small" checked
+                                    onchange="updateModalPrice()">
+                                <span>Small</span>
+                            </label>
+                            <label class="size-option">
+                                <input type="radio" name="modal-size" value="large" onchange="updateModalPrice()">
+                                <span>Large</span>
+                            </label>
+                        </div>
+                    </div>
                     <div class="modal-features">
                         <div class="feature-item">
                             <i data-lucide="check-circle" class="feature-icon"></i>

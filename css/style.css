@@ -2107,37 +2107,75 @@ button {
    ========================================= */
 @media (max-width: 768px) {
   .product-modal {
-    align-items: center; /* Center the modal */
-    padding: 1rem; 
+    align-items: center;
+    padding: 0.5rem; /* Reduced padding on wrapper */
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
   }
 
   .modal-content {
-    max-height: 50vh; /* "shouldnt take longer than 50% on the page" */
-    width: 90%;
+    max-height: 90vh; /* Further increased */
+    width: 95%; /* Slightly wider */
     margin: 0 auto;
-    overflow: hidden; /* "no scrolling function" for container */
+    overflow: hidden;
     display: flex;
     flex-direction: column;
+    border-radius: 1.5rem;
+    position: relative;
+    background: white;
   }
 
   .modal-body {
-    padding: 1rem; 
-    gap: 0.75rem;
-    overflow-y: hidden; /* "no scrolling function" */
-    display: grid;
-    /* Image left, details right */
-    grid-template-columns: 80px 1fr; 
-    align-items: start;
+    padding: 0;
+    overflow-y: auto; 
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
     height: 100%;
+    text-align: center;
+  }
+  
+  /* Details Wrapper */
+  .modal-details {
+      padding: 1rem; /* Reduced from 1.5rem */
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem; /* Tighter gap */
   }
 
-  /* Compact Image */
+  /* Badge */
+  .modal-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 20;
+    
+    font-size: 0.6rem; 
+    font-weight: 700;
+    color: white;
+    background: var(--color-secondary); 
+    border: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+    line-height: 1;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+
+  /* Taller Image - "increase the height of the picture" */
   .modal-image {
-    width: 80px;
-    height: 80px;
-    border-radius: 0.5rem;
+    width: 100%; 
+    height: 350px; /* Increased from 250px */
+    border-radius: 0;
     background: var(--color-gray-100);
-    margin: 0; /* Override any margin */
+    margin: 0;
+    flex-shrink: 0;
+    box-shadow: none;
+    position: relative;
   }
   
   .modal-image img {
@@ -2146,75 +2184,114 @@ button {
      object-fit: cover;
   }
 
-  /* Details Container */
-  .modal-details {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      overflow: hidden; 
-  }
-
-  /* Badge: Match .badge exactly */
-  .modal-badge {
-    font-size: 0.5rem; 
-    font-weight: 500;
-    color: var(--color-secondary); /* "main color should be the secondary color" */
-    background: transparent;
-    border: 1px solid var(--color-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 0.2rem 0.5rem;
-    border-radius: 9999px;
-    margin-bottom: 0.25rem;
-    width: fit-content;
-    line-height: normal;
-  }
-
-  /* Smaller Fonts & Colors */
   .modal-title {
-    font-size: 1rem; /* "smaller fonts" */
-    margin-bottom: 0.1rem;
-    color: var(--color-secondary); /* "main color should be the secondary color" */
-    line-height: 1.2;
-  }
-
-  .modal-price {
-    font-size: 0.9rem; 
-    color: var(--color-primary); 
+    font-size: 1.5rem; 
+    font-family: var(--font-serif);
+    color: var(--color-secondary);
+    margin: 0.25rem 0 0; /* Reduced margin */
+    line-height: 1.1;
     font-weight: 700;
+    text-transform: uppercase; /* "text transform the heading to uppercase" */
+    letter-spacing: 0.05em;
   }
 
-  .modal-description {
-    font-size: 0.75rem;
-    line-height: 1.3;
+  /* Price */
+  .modal-price {
+    font-size: 1.2rem;
     color: var(--color-secondary); 
-    margin-top: 0.25rem;
+    font-weight: 800;
+    margin: 0.25rem 0; /* Reduced margin */
     
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    background: #fdf2f8; 
+    padding: 0.3rem 1rem; /* Slightly smaller padding */
+    border-radius: 1rem;
+    display: inline-block;
   }
 
+  /* Hidden elements */
+  .modal-description, 
   .modal-features {
-      display: none; 
+    display: none;
+  }
+
+  /* Size Selector */
+  .modal-size-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 0.5rem 0 1rem; /* Reduced margins */
+    
+    background: transparent;
+    border: 1px solid var(--color-gray-200);
+    padding: 0.3rem 0.8rem; 
+    border-radius: 99px;
+    width: auto;
+  }
+
+  .size-label {
+      font-weight: 600;
+      font-size: 0.75rem;
+      color: var(--color-gray-500);
+      margin-right: 0.25rem;
+      text-transform: uppercase;
+  }
+
+  .size-options {
+      display: flex;
+      gap: 1rem;
+  }
+
+  .size-option {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-secondary);
   }
   
+  .size-option input {
+      accent-color: var(--color-secondary);
+      width: 1rem;
+      height: 1rem;
+  }
+
   /* Actions */
   .modal-actions {
-      grid-column: 1 / -1; 
-      margin-top: auto; 
-      padding-top: 0.5rem;
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
       width: 100%;
+      margin-top: auto;
   }
   
-  .modal-btn {
-      padding: 0.6rem 1rem;
-      font-size: 0.8rem;
+  .modal-add-to-cart {
       width: 100%;
+      padding: 0.8rem; /* Slightly reduced */
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      
+      background: transparent;
+      color: var(--color-secondary);
+      border: 2px solid var(--color-secondary);
+      border-radius: 2rem;
+      
+      display: flex;
+      align-items: center;
       justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
+  }
+
+  .modal-add-to-cart:hover {
+      background: var(--color-secondary);
+      color: white;
+  }
+  
+  .modal-add-to-cart i {
+      width: 1.2rem;
+      height: 1.2rem;
   }
 }
