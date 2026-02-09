@@ -2108,14 +2108,17 @@ button {
 @media (max-width: 768px) {
   .product-modal {
     align-items: center;
-    padding: 0.5rem; /* Reduced padding on wrapper */
+    padding: 0.5rem;
+    /* Reduced padding on wrapper */
     background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(8px);
   }
 
   .modal-content {
-    max-height: 90vh; /* Further increased */
-    width: 95%; /* Slightly wider */
+    max-height: 90vh;
+    /* Further increased */
+    width: 95%;
+    /* Slightly wider */
     margin: 0 auto;
     overflow: hidden;
     display: flex;
@@ -2127,22 +2130,24 @@ button {
 
   .modal-body {
     padding: 0;
-    overflow-y: auto; 
-    display: flex; 
+    overflow-y: auto;
+    display: flex;
     flex-direction: column;
     align-items: center;
     height: 100%;
     text-align: center;
   }
-  
+
   /* Details Wrapper */
   .modal-details {
-      padding: 1rem; /* Reduced from 1.5rem */
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.25rem; /* Tighter gap */
+    padding: 1rem;
+    /* Reduced from 1.5rem */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    /* Tighter gap */
   }
 
   /* Badge */
@@ -2151,11 +2156,11 @@ button {
     top: 15px;
     left: 15px;
     z-index: 20;
-    
-    font-size: 0.6rem; 
+
+    font-size: 0.6rem;
     font-weight: 700;
     color: white;
-    background: var(--color-secondary); 
+    background: var(--color-secondary);
     border: none;
     padding: 0.3rem 0.8rem;
     border-radius: 2rem;
@@ -2163,13 +2168,14 @@ button {
     letter-spacing: 1px;
     margin: 0;
     line-height: 1;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   }
 
   /* Taller Image - "increase the height of the picture" */
   .modal-image {
-    width: 100%; 
-    height: 350px; /* Increased from 250px */
+    width: 100%;
+    height: 350px;
+    /* Increased from 250px */
     border-radius: 0;
     background: var(--color-gray-100);
     margin: 0;
@@ -2177,39 +2183,43 @@ button {
     box-shadow: none;
     position: relative;
   }
-  
+
   .modal-image img {
-     width: 100%;
-     height: 100%;
-     object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .modal-title {
-    font-size: 1.5rem; 
+    font-size: 1.5rem;
     font-family: var(--font-serif);
     color: var(--color-secondary);
-    margin: 0.25rem 0 0; /* Reduced margin */
+    margin: 0.25rem 0 0;
+    /* Reduced margin */
     line-height: 1.1;
     font-weight: 700;
-    text-transform: uppercase; /* "text transform the heading to uppercase" */
+    text-transform: uppercase;
+    /* "text transform the heading to uppercase" */
     letter-spacing: 0.05em;
   }
 
   /* Price */
   .modal-price {
     font-size: 1.2rem;
-    color: var(--color-secondary); 
+    color: var(--color-secondary);
     font-weight: 800;
-    margin: 0.25rem 0; /* Reduced margin */
-    
-    background: #fdf2f8; 
-    padding: 0.3rem 1rem; /* Slightly smaller padding */
+    margin: 0.25rem 0;
+    /* Reduced margin */
+
+    background: #fdf2f8;
+    padding: 0.3rem 1rem;
+    /* Slightly smaller padding */
     border-radius: 1rem;
     display: inline-block;
   }
 
   /* Hidden elements */
-  .modal-description, 
+  .modal-description,
   .modal-features {
     display: none;
   }
@@ -2220,78 +2230,141 @@ button {
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
-    margin: 0.5rem 0 1rem; /* Reduced margins */
-    
+    margin: 0.5rem 0 1rem;
+    /* Reduced margins */
+
     background: transparent;
     border: 1px solid var(--color-gray-200);
-    padding: 0.3rem 0.8rem; 
+    padding: 0.3rem 0.8rem;
     border-radius: 99px;
     width: auto;
   }
 
   .size-label {
-      font-weight: 600;
-      font-size: 0.75rem;
-      color: var(--color-gray-500);
-      margin-right: 0.25rem;
-      text-transform: uppercase;
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: var(--color-gray-500);
+    margin-right: 0.25rem;
+    text-transform: uppercase;
   }
 
   .size-options {
-      display: flex;
-      gap: 1rem;
+    display: flex;
+    gap: 1rem;
   }
 
   .size-option {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--color-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-secondary);
   }
-  
+
   .size-option input {
-      accent-color: var(--color-secondary);
-      width: 1rem;
-      height: 1rem;
+    accent-color: var(--color-secondary);
+    width: 1rem;
+    height: 1rem;
   }
 
   /* Actions */
   .modal-actions {
-      width: 100%;
-      margin-top: auto;
+    width: 100%;
+    margin-top: auto;
   }
-  
+
   .modal-add-to-cart {
-      width: 100%;
-      padding: 0.8rem; /* Slightly reduced */
-      font-size: 0.9rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      
-      background: transparent;
-      color: var(--color-secondary);
-      border: 2px solid var(--color-secondary);
-      border-radius: 2rem;
-      
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: all 0.2s ease-in-out;
-      cursor: pointer;
+    width: 100%;
+    padding: 0.8rem;
+    /* Slightly reduced */
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    background: transparent;
+    color: var(--color-secondary);
+    border: 2px solid var(--color-secondary);
+    border-radius: 2rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
   }
 
   .modal-add-to-cart:hover {
-      background: var(--color-secondary);
-      color: white;
+    background: var(--color-secondary);
+    color: white;
   }
-  
+
   .modal-add-to-cart i {
-      width: 1.2rem;
-      height: 1.2rem;
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}
+
+
+/* =========================================
+   Final Polish (Container, Cards, Typography)
+   ========================================= */
+
+/* "div carrying the whole featured products container should have 100% max width" */
+/* "div carrying the whole featured products container should have 100% max width" */
+.section-shop {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 1rem;
+  /* Prevent edge collision */
+  margin: 3rem 0 !important;
+  /* Added margin above and below product div */
+}
+
+/* "the margins should also be reduced" - targeting container margins if any */
+.container {
+  padding: 0 1rem;
+  /* Ensure consistent padding */
+}
+
+/* "product name font should be reduced as well" */
+.product-title {
+  font-size: 0.7rem !important;
+  margin-bottom: 0.25rem !important;
+  /* Reduced margin */
+}
+
+/* "pricing should be in naira and with a smaller font" */
+.price {
+  font-size: 0.7rem !important;
+  font-weight: 700;
+}
+
+/* "the margins should also be reduced" - targeting details */
+.product-details {
+  padding: 0.5rem !important;
+  /* Reduced from 1rem */
+}
+
+/* Tighter spacing for meta (rating/badge) */
+.product-meta {
+  margin-bottom: 0.25rem !important;
+}
+
+/* Tighter spacing for price row */
+.price-row {
+  padding-top: 0.25rem !important;
+  border-top: 1px solid var(--color-gray-100);
+}
+
+/* Adjust grid gap slightly if needed for "widened" feel, 
+   but 100% width container usually does the trick */
+@media (min-width: 768px) {
+  .product-grid {
+    gap: 1.5rem;
+    /* Slightly reduced gap from 2rem to give more width to cards */
   }
 }

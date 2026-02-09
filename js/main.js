@@ -158,7 +158,7 @@ function renderCartItems_OLD() {
     }
 
     if (cartTotalPriceEl) {
-        cartTotalPriceEl.textContent = '$' + total.toFixed(2);
+        cartTotalPriceEl.textContent = '₦' + total.toLocaleString(); // Use toLocaleString for commas
     }
 
     // Save to localStorage
