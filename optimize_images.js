@@ -50,8 +50,8 @@ async function optimizeImages() {
 
         const originalSize = fs.statSync(file).size;
 
-        // Skip small files (< 200KB)
-        if (originalSize < 200 * 1024) continue;
+        // Skip small files (< 50KB)
+        if (originalSize < 50 * 1024) continue;
 
         console.log(`Optimizing: ${filename} (${(originalSize / 1024).toFixed(0)} KB)`);
 
