@@ -177,6 +177,14 @@ function clearCart() {
 // Make clearCart global
 window.clearCart = clearCart;
 
+function removeItem(index) {
+    cartItems.splice(index, 1);
+    renderCartItems();
+    cartCount = cartItems.length;
+    updateCartUI();
+}
+window.removeItem = removeItem;
+
 
 // Initialize cart UI on page load
 renderCartItems();
@@ -447,9 +455,28 @@ function openProductModal(productCard) {
     const smallRadio = document.querySelector('input[name="modal-size"][value="small"]');
     if (smallRadio) {
         smallRadio.checked = true;
-        if (window.updateModalPrice) window.updateModalPrice();
-    } else {
-        if (modalPriceEl) modalPriceEl.textContent = price.replace('$', '₦');
+    }
+
+    // Special logic for Small Chops Pricing and Cakes
+    const specialCakes = ['Vanilla Cake', 'Red Velvet Cake', 'Chocolate Cake'];
+    const singleSizeProducts = ['Meat Pie', 'Chin Chin', 'Cheese Steak'];
+
+    // Handle Size Selector Visibility
+    const sizeSelector = document.querySelector('.modal-size-selector');
+    if (sizeSelector) {
+        if (singleSizeProducts.includes(title)) {
+            sizeSelector.style.display = 'none';
+        } else {
+            sizeSelector.style.display = 'flex';
+        }
+    }
+
+    if (title === 'Small Chops' && modalPriceEl) {
+        modalPriceEl.textContent = '₦4,000'; // Default small price
+    } else if (specialCakes.includes(title) && modalPriceEl) {
+        modalPriceEl.textContent = '₦2,500'; // Default small price for cakes
+    } else if (modalPriceEl) {
+        modalPriceEl.textContent = price.replace('$', '₦');
     }
 
     if (modalBadgeEl) {
@@ -460,12 +487,47 @@ function openProductModal(productCard) {
     // Update modal image background
     if (modalImage) {
         modalImage.className = `modal-image ${colorClass}`;
+        modalImage.style.position = 'relative'; // Ensure positioning for dots
 
-        // Add product image to modal if it exists
-        if (productImageSrc) {
-            modalImage.innerHTML = `<img src="${productImageSrc}" alt="${title}">`;
+        if (title === 'Small Chops') {
+            // Render Slider for Small Chops
+            modalImage.innerHTML = `
+                <div class="modal-slider" id="modal-slider">
+                    <div class="modal-slide">
+                        <img src="./assets/products/smallchops_big.png" alt="Small Chops Big">
+                    </div>
+                    <div class="modal-slide">
+                        <img src="./assets/products/smallchops_small.png" alt="Small Chops Small">
+                    </div>
+                </div>
+                <div class="modal-dots">
+                    <div class="modal-dot active"></div>
+                    <div class="modal-dot"></div>
+                </div>
+            `;
+
+            // Add scroll listener for dots
+            const slider = document.getElementById('modal-slider');
+            const dots = document.querySelectorAll('.modal-dot');
+            if (slider) {
+                slider.addEventListener('scroll', () => {
+                    const scrollLeft = slider.scrollLeft;
+                    const width = slider.offsetWidth;
+                    const index = Math.round(scrollLeft / width);
+
+                    dots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === index);
+                    });
+                });
+            }
+
         } else {
-            modalImage.innerHTML = '<div class="modal-image-placeholder">🧁</div>';
+            // Standard Single Image
+            if (productImageSrc) {
+                modalImage.innerHTML = `<img src="${productImageSrc}" alt="${title}">`;
+            } else {
+                modalImage.innerHTML = '<div class="modal-image-placeholder">🧁</div>';
+            }
         }
     }
 
@@ -516,8 +578,35 @@ function addToCartFromModal() {
     // Determine Size and Price
     const sizeRadio = document.querySelector('input[name="modal-size"]:checked');
     const size = sizeRadio ? sizeRadio.value : 'small';
-    const finalPrice = size === 'small' ? '₦2,500' : '₦9,500';
-    const titleWithSize = `${currentModalProduct.title} (${size.charAt(0).toUpperCase() + size.slice(1)})`;
+    let finalPrice;
+
+    const specialCakes = ['Vanilla Cake', 'Red Velvet Cake', 'Chocolate Cake'];
+    const singleSizeProducts = ['Meat Pie', 'Chin Chin', 'Cheese Steak'];
+
+    let titleWithSize;
+
+    // Custom Pricing Logic
+    if (currentModalProduct.title === 'Small Chops') {
+        finalPrice = size === 'small' ? '₦4,000' : '₦8,000';
+        titleWithSize = `${currentModalProduct.title} (${size.charAt(0).toUpperCase() + size.slice(1)})`;
+    } else if (specialCakes.includes(currentModalProduct.title)) {
+        finalPrice = size === 'small' ? '₦2,500' : '₦7,000';
+        titleWithSize = `${currentModalProduct.title} (${size.charAt(0).toUpperCase() + size.slice(1)})`;
+    } else if (singleSizeProducts.includes(currentModalProduct.title)) {
+        // Single size products use the displayed price directly (cleaned)
+        // We assume the openProductModal set the price correctly from the card
+        // But price might have currency symbol.
+        // Actually, openProductModal sets modalPriceEl. content.
+        // But here we can just use the price from the card which was passed in currentModalProduct.price
+        // However, checking openProductModal again, it sets modalPriceEl based on title.
+        // For single products, it falls through to 'else if (modalPriceEl) ... price.replace'.
+        // So currentModalProduct.price holds the price from the card.
+        finalPrice = currentModalProduct.price;
+        titleWithSize = currentModalProduct.title; // No size suffix
+    } else {
+        finalPrice = size === 'small' ? '₦2,500' : '₦9,500';
+        titleWithSize = `${currentModalProduct.title} (${size.charAt(0).toUpperCase() + size.slice(1)})`;
+    }
 
     // Add to cart
     cartItems.push({
@@ -567,9 +656,22 @@ window.updateModalPrice = function () {
     const sizeRadio = document.querySelector('input[name="modal-size"]:checked');
     if (!sizeRadio) return;
 
+    // Skip if single size product (shouldn't happen if selector is hidden, but good for safety)
+    if (currentModalProduct && ['Meat Pie', 'Chin Chin', 'Cheese Steak'].includes(currentModalProduct.title)) {
+        return;
+    }
+
     const priceEl = document.getElementById('modal-price');
-    if (priceEl) {
-        priceEl.textContent = sizeRadio.value === 'small' ? '₦2,500' : '₦9,500';
+    if (priceEl && currentModalProduct) {
+        const specialCakes = ['Vanilla Cake', 'Red Velvet Cake', 'Chocolate Cake'];
+
+        if (currentModalProduct.title === 'Small Chops') {
+            priceEl.textContent = sizeRadio.value === 'small' ? '₦4,000' : '₦8,000';
+        } else if (specialCakes.includes(currentModalProduct.title)) {
+            priceEl.textContent = sizeRadio.value === 'small' ? '₦2,500' : '₦7,000';
+        } else {
+            priceEl.textContent = sizeRadio.value === 'small' ? '₦2,500' : '₦9,500';
+        }
     }
 };
 
@@ -634,7 +736,6 @@ function renderCartItems() {
             headerEl.className = 'cart-header';
             headerEl.innerHTML = `
                 <h2>Your Items (${cartItems.length})</h2>
-                <button onclick="clearCart()" class="clear-cart-btn">Remove All Items</button>
             `;
             cartPageContainer.appendChild(headerEl);
 
@@ -662,7 +763,7 @@ function renderCartItems() {
                         <h3 class="cart-item-title">${item.title}</h3>
                         <div class="cart-item-price">${item.price}</div>
                     </div>
-                     <button onclick="removeItem(${index})" class="remove-btn" style="padding: 0.5rem; color: #dc2626; background: none; border: none; cursor: pointer;">
+                     <button onclick="removeItem(${index})" title="Remove Item" class="remove-btn" style="padding: 0.5rem; color: #dc2626; background: none; border: none; cursor: pointer; transition: transform 0.2s;">
                         <i data-lucide="trash-2" style="width: 1.25rem; height: 1.25rem;"></i>
                     </button>
                 `;
@@ -670,15 +771,32 @@ function renderCartItems() {
             });
             cartPageContainer.appendChild(gridEl);
 
-            // Total
-            const totalEl = document.createElement('div');
-            totalEl.style.marginTop = "2rem";
-            totalEl.style.textAlign = "right";
-            totalEl.innerHTML = `
-                <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">Total: $${total.toFixed(2)}</div>
-                <a href="checkout.html" class="btn btn-primary" style="padding: 1rem 2rem; display: inline-block;">Proceed to Checkout</a>
+            // Actions & Total Section
+            const actionsEl = document.createElement('div');
+            actionsEl.className = 'cart-actions-container';
+            actionsEl.style.display = 'flex';
+            actionsEl.style.justifyContent = 'space-between';
+            actionsEl.style.alignItems = 'center';
+            actionsEl.style.marginTop = '2rem';
+            actionsEl.style.paddingTop = '2rem';
+            actionsEl.style.borderTop = '1px solid var(--color-gray-200)';
+
+            actionsEl.innerHTML = `
+                <button onclick="clearCart()" class="clear-cart-btn-styled">
+                    <i data-lucide="trash" style="width: 1rem; height: 1rem;"></i>
+                    Clear Cart
+                </button>
+                
+                <div class="cart-summary" style="text-align: right;">
+                    <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-secondary);">
+                        Total: ₦${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </div>
+                    <a href="checkout.html" class="btn btn-primary" style="padding: 1rem 2.5rem; width: auto; display: inline-flex; align-items: center; gap: 0.5rem;">
+                        Checkout <i data-lucide="arrow-right" style="width: 1.25rem; height: 1.25rem;"></i>
+                    </a>
+                </div>
              `;
-            cartPageContainer.appendChild(totalEl);
+            cartPageContainer.appendChild(actionsEl);
         }
 
         if (window.lucide) lucide.createIcons();

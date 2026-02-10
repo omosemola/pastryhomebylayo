@@ -1388,9 +1388,11 @@ button {
 .modal-content {
   background: white;
   border-radius: 1.5rem;
-  max-width: 70%;
+  max-width: 80%;
+  /* Updated from 70% */
   max-height: 50vh;
-  width: 100%;
+  width: 80%;
+  /* Explicit width */
   overflow-y: auto;
   position: relative;
   transform: scale(0.5) translateY(50px) rotate(-15deg);
@@ -1920,8 +1922,10 @@ button {
 .modal-content {
   background: white;
   border-radius: 1.5rem;
-  width: 90%;
-  max-width: 900px;
+  width: 80%;
+  /* Updated from 90% */
+  max-width: 80%;
+  /* Updated from 900px */
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
@@ -2194,6 +2198,34 @@ button {
   background-color: var(--color-secondary) !important;
   color: white !important;
   border-color: var(--color-secondary) !important;
+}
+
+/* Updated Cart UI Styles */
+.clear-cart-btn-styled {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--color-red-200, #fee2e2);
+  color: var(--color-red-600, #dc2626);
+  background: white;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clear-cart-btn-styled:hover {
+  background: var(--color-red-50, #fef2f2);
+  border-color: var(--color-red-300, #fca5a5);
+  transform: translateY(-1px);
+}
+
+/* Navbar solid background for non-home pages */
+.navbar-solid {
+  background: var(--color-secondary);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  padding: 1rem 0;
 }
 
 /* Ensure container has width */
@@ -2524,6 +2556,57 @@ button {
   text-transform: uppercase;
   opacity: 0.9;
   font-family: var(--font-serif);
+}
+
+/* Modal Slider Styles */
+.modal-slider {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  /* Hide scrollbar */
+  -ms-overflow-style: none;
+}
+
+.modal-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-slide {
+  min-width: 100%;
+  height: 100%;
+  scroll-snap-align: center;
+}
+
+.modal-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.modal-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s;
+}
+
+.modal-dot.active {
+  background: white;
+  transform: scale(1.2);
 }
 
 /* About Section Typography */
@@ -2878,6 +2961,8 @@ button {
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   filter: grayscale(20%);
   /* Slight mute */
+  animation: bounce 2s infinite ease-in-out;
+  /* Default bounce animation */
 }
 
 .social-img-link img {
@@ -2891,6 +2976,8 @@ button {
 .social-img-link:hover {
   transform: translateY(-8px) scale(1.15);
   filter: grayscale(0%);
+  animation-play-state: paused;
+  /* Optional: pause on hover */
 }
 
 .social-img-link:hover img {
@@ -2923,26 +3010,24 @@ button {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  background: linear-gradient(135deg, #25D366, #20bd5a);
+  background-color: #25D366;
   color: white;
-  padding: 0.6rem 1.2rem;
-  /* Smaller padding */
-  border-radius: 50px;
-  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+  width: 60px;
+  /* Fixed width */
+  height: 60px;
+  /* Fixed height */
+  border-radius: 50%;
+  /* Perfect circle */
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
   display: flex;
   align-items: center;
-  gap: 8px;
-  /* Tighter gap */
+  justify-content: center;
+  /* Center icon */
   z-index: 9999;
-  font-weight: 600;
-  font-size: 0.9rem;
-  /* Smaller font */
   text-decoration: none;
-  font-family: var(--font-sans);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border: 2px solid white;
   animation: localizedBounce 3s infinite ease-in-out;
-  /* Bouncing animation */
-  transition: all 0.3s ease;
 }
 
 .whatsapp-float:hover {
