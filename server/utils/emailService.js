@@ -1,27 +1,53 @@
 const nodemailer = require('nodemailer');
 
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // use false for STARTTLS; true for 465
-    family: 4, // Force IPv4 (Critical for Render)
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-    tls: {
-        rejectUnauthorized: false
-    },
-    connectionTimeout: 10000
-});
+const dns = require('dns');
+const { promisify } = require('util');
+const resolve4 = promisify(dns.resolve4);
 
-// Debug: Check if env vars are loaded
-console.log('📧 Email Service Initialized');
-console.log('   User:', process.env.EMAIL_USER ? 'SET' : 'MISSING');
-console.log('   Pass:', process.env.EMAIL_PASS ? 'SET (Length: ' + process.env.EMAIL_PASS.length + ')' : 'MISSING');
+let transporter;
+
+const initializeEmailService = async () => {
+    try {
+        const addresses = await resolve4('smtp.gmail.com');
+        const gmailIp = addresses[0];
+        console.log(`📧 Resolved Gmail IPv4: ${gmailIp}`);
+
+        transporter = nodemailer.createTransport({
+            host: gmailIp, // Use resolved IP directly
+            port: 587,
+            secure: false,
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            },
+            tls: {
+                servername: 'smtp.gmail.com', // Vital for SSL verification
+                rejectUnauthorized: false
+            },
+            connectionTimeout: 10000
+        });
+
+        console.log('📧 Email Service Initialized (IPv4 Forced)');
+    } catch (error) {
+        console.error('❌ Failed to resolve Gmail IP:', error);
+        // Fallback to standard config if resolution fails
+        transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
+        });
+    }
+};
+
+// Initialize immediately
+initializeEmailService();
 
 const sendEmail = async (to, subject, html) => {
     try {
+        if (!transporter) {
+            console.log('⏳ Waiting for email transport initialization...');
+            await initializeEmailService();
+        }
+
         const mailOptions = {
             from: `"Pastry Home by Layo" <${process.env.EMAIL_USER}>`,
             to,
