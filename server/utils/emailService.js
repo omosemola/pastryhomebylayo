@@ -33,7 +33,9 @@ const sendEmail = async (to, subject, htmlContent) => {
         console.log(`✅ Email sent to ${to}. MessageId: ${response.data.messageId}`);
         return response.data;
     } catch (error) {
+        // Debug: Log key length to verify it's loaded
         console.error('❌ Error sending email via Brevo:', error.response ? error.response.data : error.message);
+        console.error('   API Key Loaded:', apiKey ? `YES (Length: ${apiKey.length})` : 'NO');
         throw error;
     }
 };
