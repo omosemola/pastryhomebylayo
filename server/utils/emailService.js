@@ -14,8 +14,8 @@ const initializeEmailService = async () => {
 
         transporter = nodemailer.createTransport({
             host: gmailIp, // Use resolved IP directly
-            port: 587,
-            secure: false,
+            port: 465, // Try Port 465 (SSL)
+            secure: true, // true for 465
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS
@@ -24,7 +24,7 @@ const initializeEmailService = async () => {
                 servername: 'smtp.gmail.com', // Vital for SSL verification
                 rejectUnauthorized: false
             },
-            connectionTimeout: 10000
+            connectionTimeout: 20000 // Increase to 20s
         });
 
         console.log('📧 Email Service Initialized (IPv4 Forced)');
