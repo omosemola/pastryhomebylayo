@@ -273,6 +273,7 @@ function showPaymentModal(amount) {
                 document.body.removeChild(modalOverlay);
                 showSuccessMessage();
             } else {
+                console.error('SERVER ERROR DETAILS:', data); // Log full details for debugging
                 throw new Error(data.message || 'Order failed');
             }
 
