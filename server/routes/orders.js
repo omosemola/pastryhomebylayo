@@ -56,7 +56,7 @@ router.get('/test-email', async (req, res) => {
     try {
         const { sendTestEmail } = require('../utils/emailService');
         const result = await sendTestEmail();
-        res.json({ success: true, message: 'Email sent successfully', info: result });
+        res.json({ success: true, message: 'Email sent successfully via Brevo', info: result });
     } catch (error) {
         console.error('Test Email Failed:', error);
         res.status(500).json({ success: false, message: 'Email failed', error: error.message, stack: error.stack });

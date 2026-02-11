@@ -1,62 +1,38 @@
-const nodemailer = require('nodemailer');
+const axios = require('axios');
 
-const dns = require('dns');
-const { promisify } = require('util');
-const resolve4 = promisify(dns.resolve4);
+const sendEmail = async (to, subject, htmlContent) => {
+    const apiKey = process.env.BREVO_API_KEY;
 
-let transporter;
-
-const initializeEmailService = async () => {
-    try {
-        const addresses = await resolve4('smtp.gmail.com');
-        const gmailIp = addresses[0];
-        console.log(`📧 Resolved Gmail IPv4: ${gmailIp}`);
-
-        transporter = nodemailer.createTransport({
-            host: gmailIp, // Use resolved IP directly
-            port: 587,
-            secure: false, // STARTTLS
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            },
-            tls: {
-                servername: 'smtp.gmail.com', // Vital for SSL verification
-                rejectUnauthorized: false
-            },
-            connectionTimeout: 30000 // 30 seconds
-        });
-
-        console.log(`📧 Email Service Initialized (IPv4 Forced: ${gmailIp})`);
-    } catch (error) {
-        console.error('❌ Failed to resolve Gmail IP:', error);
-        // Throw error to see it in the test response
-        throw new Error(`DNS Resolution Failed: ${error.message}`);
+    if (!apiKey) {
+        console.error('❌ BREVO_API_KEY is missing in environment variables');
+        return;
     }
-};
 
-// Initialize immediately
-initializeEmailService().catch(err => console.error(err));
-
-const sendEmail = async (to, subject, html) => {
     try {
-        if (!transporter) {
-            console.log('⏳ Waiting for email transport initialization...');
-            await initializeEmailService();
-        }
+        const response = await axios.post(
+            'https://api.brevo.com/v3/smtp/email',
+            {
+                sender: {
+                    name: "Pastry Home by Layo",
+                    email: process.env.EMAIL_USER // Validated sender in Brevo
+                },
+                to: [{ email: to }],
+                subject: subject,
+                htmlContent: htmlContent
+            },
+            {
+                headers: {
+                    'accept': 'application/json',
+                    'api-key': apiKey,
+                    'content-type': 'application/json'
+                }
+            }
+        );
 
-        const mailOptions = {
-            from: `"Pastry Home by Layo" <${process.env.EMAIL_USER}>`,
-            to,
-            subject,
-            html
-        };
-
-        const info = await transporter.sendMail(mailOptions);
-        console.log('Message sent: %s', info.messageId);
-        return info;
+        console.log(`✅ Email sent to ${to}. MessageId: ${response.data.messageId}`);
+        return response.data;
     } catch (error) {
-        console.error('Error sending email:', error);
+        console.error('❌ Error sending email via Brevo:', error.response ? error.response.data : error.message);
         throw error;
     }
 };
@@ -141,72 +117,12 @@ const sendOrderDeliveredEmail = async (order) => {
     return sendEmail(order.customer.email, `Order Delivered - ${order.orderNumber}`, html);
 };
 
-const net = require('net');
-
-const testConnection = (port) => {
-    return new Promise((resolve, reject) => {
-        console.log(`🔌 Testing TCP connection to smtp.gmail.com:${port}...`);
-        const socket = new net.Socket();
-        let status = 'pending';
-
-        // Timeout after 5s
-        socket.setTimeout(5000);
-
-        socket.on('connect', () => {
-            console.log(`✅ Connected to smtp.gmail.com:${port}`);
-            status = 'success';
-            socket.destroy();
-            resolve(true);
-        });
-
-        socket.on('timeout', () => {
-            console.log(`❌ Timeout connecting to smtp.gmail.com:${port}`);
-            status = 'timeout';
-            socket.destroy();
-            reject(new Error('Connection Timed Out'));
-        });
-
-        socket.on('error', (err) => {
-            console.log(`❌ Error connecting to smtp.gmail.com:${port}:`, err.message);
-            reject(err);
-        });
-
-        socket.connect(port, 'smtp.gmail.com');
-    });
-};
-
 const sendTestEmail = async () => {
-    // 1. Pre-flight Network Check
-    const results = { port587: 'failed', port465: 'failed' };
-
-    try {
-        await testConnection(587);
-        results.port587 = 'success';
-    } catch (e) { results.port587 = e.message; }
-
-    try {
-        await testConnection(465);
-        results.port465 = 'success';
-    } catch (e) { results.port465 = e.message; }
-
-    if (results.port587 !== 'success' && results.port465 !== 'success') {
-        throw new Error(`NETWORK BLOCK DETECTED. Port 587: ${results.port587}, Port 465: ${results.port465}`);
-    }
-
-    // 2. If valid, try sending (Reusing previous robust config logic)
-    // We re-init here to ensure we use the working config if possible, 
-    // but for now let's just use the default transport if check passes.
-    if (!transporter) await initializeEmailService();
-
-    return sendEmail(process.env.EMAIL_USER, 'Test Email from Production',
-        `Network Check: Passed!\nPort 587: ${results.port587}\nPort 465: ${results.port465}\n\nEmail sent successfully.`);
-};
-
-const getDebugInfo = () => {
-    return {
-        transport: transporter ? 'Initialized' : 'Not Initialized',
-        host: transporter && transporter.options ? transporter.options.host : 'Unknown'
-    };
+    return sendEmail(
+        process.env.EMAIL_USER,
+        'Test Email from Brevo API',
+        '<h3>It Works! 🎉</h3><p>If you see this, the Brevo API is successfully sending emails from Render!</p>'
+    );
 };
 
 module.exports = {
@@ -214,6 +130,5 @@ module.exports = {
     sendAdminNotification,
     sendPaymentSuccessEmail,
     sendOrderDeliveredEmail,
-    sendTestEmail,
-    getDebugInfo
+    sendTestEmail
 };
