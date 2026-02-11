@@ -9,11 +9,7 @@ async function fetchShopProducts() {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
 
-    // DEBUG LOGGING
-    console.log('🛒 Fetching products...');
-    console.log('🌍 API URL Base:', API_URL);
     const targetUrl = `${API_URL}/products`;
-    console.log('🎯 Target Endpoint:', targetUrl);
 
     try {
         const res = await fetch(targetUrl);
