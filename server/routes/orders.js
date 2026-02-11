@@ -101,4 +101,16 @@ router.patch('/:id/status', async (req, res) => {
     }
 });
 
+// @route   GET /api/orders
+// @desc    Get all orders
+// @access  Private (Admin)
+router.get('/', require('../middleware/auth'), async (req, res) => {
+    try {
+        const orders = await Order.find().sort({ createdAt: -1 }).populate('items.product');
+        res.json({ success: true, data: orders });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Error fetching orders', error: err.message });
+    }
+});
+
 module.exports = router;

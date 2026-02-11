@@ -69,4 +69,50 @@ router.get('/featured/list', async (req, res) => {
     }
 });
 
+// @route   POST /api/products
+// @desc    Create a product
+// @access  Private (Admin)
+router.post('/', require('../middleware/auth'), async (req, res) => {
+    try {
+        const newProduct = new Product(req.body);
+        const product = await newProduct.save();
+        res.json({ success: true, data: product });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Error creating product', error: err.message });
+    }
+});
+
+// @route   PUT /api/products/:id
+// @desc    Update a product
+// @access  Private (Admin)
+router.put('/:id', require('../middleware/auth'), async (req, res) => {
+    try {
+        console.log(`[Product Update] ID: ${req.params.id}, Data:`, req.body);
+        const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!product) {
+            console.log(`[Product Update] Product not found: ${req.params.id}`);
+            return res.status(404).json({ success: false, message: 'Product not found' });
+        }
+        res.json({ success: true, data: product });
+    } catch (err) {
+        console.error(`[Product Update Error] ${err.message}`);
+        res.status(500).json({ success: false, message: 'Error updating product', error: err.message });
+    }
+});
+
+// @route   DELETE /api/products/:id
+// @desc    Delete a product
+// @access  Private (Admin)
+router.delete('/:id', require('../middleware/auth'), async (req, res) => {
+    try {
+        const product = await Product.findByIdAndDelete(req.params.id);
+        if (!product) {
+            return res.status(404).json({ success: false, message: 'Product not found' });
+        }
+        res.json({ success: true, message: 'Product removed' });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Error deleting product', error: err.message });
+    }
+});
+
 module.exports = router;

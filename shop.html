@@ -88,178 +88,13 @@
 
     <!-- Shop Section -->
     <section class="section-padding section-shop">
-
-        <div class="product-grid">
-            <!-- Product Card 1 -->
-            <div class="product-card reveal-on-scroll" style="transition-duration: 700ms;">
-                <div class="product-image-container bg-yellow">
-                    <img src="./assets/products/banana_bread.png" alt="Banana Bread"
-                        style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-                <div class="product-details">
-                    <div class="product-meta">
-                        <span class="badge">Top Seller</span>
-                        <div class="rating">
-                            <i data-lucide="star" style="width: 0.75rem; height: 0.75rem; fill: currentColor;"></i>
-                            <span class="rating-val">4.8</span>
-                        </div>
-                    </div>
-                    <h3 class="product-title">Banana Bread</h3>
-                    <div class="price-row">
-                        <span class="price">₦9,500</span>
-                        <button class="text-link-btn">
-                            <i class="fa-solid fa-cart-arrow-down"></i>
-                        </button>
-                    </div>
-                </div>
+        <div class="product-grid" id="product-grid">
+            <!-- Products will be loaded here dynamically via js/shop.js -->
+            <div class="loading-spinner" style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                <i data-lucide="loader-2" class="animate-spin"
+                    style="width: 3rem; height: 3rem; color: var(--color-primary);"></i>
+                <p style="margin-top: 1rem; color: var(--color-gray-500);">Loading fresh pastries...</p>
             </div>
-
-            <!-- Product Card 2 -->
-            <div class="product-card reveal-on-scroll" style="transition-duration: 700ms;" data-delay="100">
-                <div class="product-image-container bg-yellow">
-                    <img src="./assets/products/smallchops_big.png" alt="Small Chops"
-                        style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-                <div class="product-details">
-                    <div class="product-meta">
-                        <span class="badge">Favorite</span>
-                    </div>
-                    <h3 class="product-title">Small Chops</h3>
-                    <div class="price-row">
-                        <span class="price">₦8,000</span>
-                        <button class="text-link-btn">
-                            <i class="fa-solid fa-cart-arrow-down"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product Card 3 -->
-            <div class="product-card reveal-on-scroll" style="transition-duration: 700ms;" data-delay="200">
-                <div class="product-image-container bg-yellow">
-                    <img src="./assets/products/vanilla_cake.png" alt="Vanilla Cake"
-                        style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-                <div class="product-details">
-                    <div class="product-meta">
-                        <span class="badge">Favorite</span>
-
-                    </div>
-                    <h3 class="product-title">Vanilla Cake</h3>
-                    <div class="price-row">
-                        <span class="price">₦7,000</span>
-                        <button class="text-link-btn">
-                            <i class="fa-solid fa-cart-arrow-down"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product Card 4 -->
-            <div class="product-card reveal-on-scroll" style="transition-duration: 700ms;" data-delay="300">
-                <div class="product-image-container bg-yellow">
-                    <img src="./assets/products/redvelvet_cake.png" alt="Red Velvet"
-                        style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-                <div class="product-details">
-                    <div class="product-meta">
-                        <span class="badge">Must Try</span>
-                    </div>
-                    <h3 class="product-title">Red Velvet Cake</h3>
-                    <div class="price-row">
-                        <span class="price">₦7,000</span>
-                        <button class="text-link-btn">
-                            <i class="fa-solid fa-cart-arrow-down"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product Card 5 -->
-            <div class="product-card reveal-on-scroll" style="transition-duration: 700ms;" data-delay="400">
-                <div class="product-image-container bg-yellow">
-                    <img src="./assets/products/chocolate_cake.png" alt="Chocolate Cake"
-                        style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-                <div class="product-details">
-                    <div class="product-meta">
-                        <span class="badge">Classic</span>
-                    </div>
-                    <h3 class="product-title">Chocolate Cake</h3>
-                    <div class="price-row">
-                        <span class="price">₦7,000</span>
-                        <button class="text-link-btn">
-                            <i class="fa-solid fa-cart-arrow-down"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product Card 6 -->
-            <div class="product-card reveal-on-scroll" style="transition-duration: 700ms;" data-delay="500">
-                <div class="product-image-container bg-yellow">
-                    <img src="./assets/products/meat_pie.png    " alt="Meat Pie"
-                        style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-                <div class="product-details">
-                    <div class="product-meta">
-                        <span class="badge">Fresh</span>
-                        <div class="rating">
-                            <i data-lucide="star" style="width: 0.75rem; height: 0.75rem; fill: currentColor;"></i>
-                            <span class="rating-val">4.8</span>
-                        </div>
-                    </div>
-                    <h3 class="product-title">Meat Pie</h3>
-                    <div class="price-row">
-                        <span class="price">₦5,000</span>
-                        <button class="text-link-btn">
-                            <i class="fa-solid fa-cart-arrow-down"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product Card 7 -->
-            <div class="product-card reveal-on-scroll" style="transition-duration: 700ms;" data-delay="600">
-                <div class="product-image-container bg-yellow">
-                    <img src="./assets/products/chin_chin.png" alt="Chin Chin"
-                        style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-                <div class="product-details">
-                    <div class="product-meta">
-                        <span class="badge">Crunchy</span>
-                    </div>
-                    <h3 class="product-title">Chin Chin</h3>
-                    <div class="price-row">
-                        <span class="price">₦2,500</span>
-                        <button class="text-link-btn">
-                            <i class="fa-solid fa-cart-arrow-down"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product Card 8 -->
-            <div class="product-card reveal-on-scroll" style="transition-duration: 700ms;" data-delay="700">
-                <div class="product-image-container bg-yellow">
-                    <img src="./assets/products/anana_bread.png" alt="Cheese Steak"
-                        style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-                <div class="product-details">
-                    <div class="product-meta">
-                        <span class="badge">Flaky</span>
-
-                    </div>
-                    <h3 class="product-title">Cheese Steak</h3>
-                    <div class="price-row">
-                        <span class="price">₦10,000</span>
-                        <button class="text-link-btn">
-                            <i class="fa-solid fa-cart-arrow-down"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
         </div>
     </section>
 
@@ -277,10 +112,6 @@
                     <span class="modal-badge" id="modal-badge">Top Seller</span>
                     <h2 class="modal-title" id="modal-title">Product Name</h2>
                     <div class="modal-price" id="modal-price">₦2,500</div>
-                    <p class="modal-description" id="modal-description">
-                        Indulge in this freshly baked delight, crafted with premium ingredients and traditional
-                        techniques. Perfect for any occasion, this treat combines elegance with exceptional flavor.
-                    </p>
 
                     <!-- Size Selector -->
                     <div class="modal-size-selector">
@@ -391,6 +222,7 @@
         </div>
     </footer>
 
+    <script src="./js/shop.js"></script>
     <script src="./js/main.js"></script>
     <script>
         lucide.createIcons();

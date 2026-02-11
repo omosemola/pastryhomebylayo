@@ -98,6 +98,13 @@ function updateCartUI() {
     renderCartItems();
 }
 
+// Expose function to refresh cart from localStorage (for other scripts)
+window.refreshGlobalCart = () => {
+    cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+    cartCount = cartItems.length;
+    updateCartUI();
+}
+
 
 function renderCartItems_OLD() {
     if (!cartItemsContainer) return;
@@ -734,8 +741,10 @@ function renderCartItems() {
             // Header
             const headerEl = document.createElement('div');
             headerEl.className = 'cart-header';
+            headerEl.style.textAlign = 'center';
+            headerEl.style.marginBottom = '2rem';
             headerEl.innerHTML = `
-                <h2>Your Items (${cartItems.length})</h2>
+                <h2 class="cart-section-title">Your Items (${cartItems.length})</h2>
             `;
             cartPageContainer.appendChild(headerEl);
 
@@ -774,25 +783,16 @@ function renderCartItems() {
             // Actions & Total Section
             const actionsEl = document.createElement('div');
             actionsEl.className = 'cart-actions-container';
-            actionsEl.style.display = 'flex';
-            actionsEl.style.justifyContent = 'space-between';
-            actionsEl.style.alignItems = 'center';
-            actionsEl.style.marginTop = '2rem';
-            actionsEl.style.paddingTop = '2rem';
-            actionsEl.style.borderTop = '1px solid var(--color-gray-200)';
 
             actionsEl.innerHTML = `
-                <button onclick="clearCart()" class="clear-cart-btn-styled">
-                    <i data-lucide="trash" style="width: 1rem; height: 1rem;"></i>
-                    Clear Cart
-                </button>
-                
-                <div class="cart-summary" style="text-align: right;">
-                    <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-secondary);">
-                        Total: ₦${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                <div class="cart-summary">
+                    <div class="cart-total-display">
+                        <span class="total-label">Subtotal:</span>
+                        <span class="total-amount">₦${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
-                    <a href="checkout.html" class="btn btn-primary" style="padding: 1rem 2.5rem; width: auto; display: inline-flex; align-items: center; gap: 0.5rem;">
-                        Checkout <i data-lucide="arrow-right" style="width: 1.25rem; height: 1.25rem;"></i>
+                    <p style="color: var(--color-gray-500); font-size: 0.6rem; margin-top: -0.5rem; margin-bottom: 0rem;"> Shipping calculated at checkout</p>
+                    <a href="checkout.html" class="btn btn-secondary checkout-btn-styled">
+                        Proceed to Checkout <i data-lucide="arrow-right" style="width: 1.25rem; height: 1.25rem;"></i>
                     </a>
                 </div>
              `;

@@ -11,10 +11,7 @@ const productSchema = new mongoose.Schema({
         required: [true, 'Product price is required'],
         min: 0
     },
-    description: {
-        type: String,
-        required: [true, 'Product description is required']
-    },
+
     image: {
         type: String,
         default: ''

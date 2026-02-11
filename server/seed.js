@@ -1,4 +1,4 @@
-const Product = require('../models/Product');
+const Product = require('./models/Product');
 
 const seedProducts = async () => {
     try {
@@ -9,75 +9,69 @@ const seedProducts = async () => {
         const products = [
             {
                 name: 'Banana Bread',
-                price: 4.50,
-                description: 'Moist and delicious homemade banana bread, baked fresh daily with ripe bananas and a hint of cinnamon.',
+                price: 9500,
                 image: './assets/products/banana_bread.png',
                 badge: 'Top Seller',
                 featured: true,
-                category: 'Bread'
+                category: 'Bread',
+                rating: 4.8
             },
             {
-                name: 'Strawberry Tart',
-                price: 6.00,
-                description: 'Fresh strawberry tart with creamy vanilla custard filling and flaky pastry crust.',
-                image: '',
-                badge: 'New',
-                featured: true,
-                category: 'Tarts'
-            },
-            {
-                name: 'Chocolate Eclair',
-                price: 5.50,
-                description: 'Classic French pastry filled with rich chocolate cream and topped with glossy chocolate glaze.',
-                image: '',
+                name: 'Small Chops',
+                price: 8000,
+                image: './assets/products/smallchops_big.png',
                 badge: 'Favorite',
                 featured: true,
-                category: 'Pastries'
+                category: 'Pastry'
             },
             {
-                name: 'Pistachio Macaron',
-                price: 3.00,
-                description: 'Delicate almond meringue cookies with smooth pistachio buttercream filling.',
-                image: '',
-                badge: 'Must Try',
+                name: 'Vanilla Cake',
+                price: 7000,
+                image: './assets/products/vanilla_cake.png',
+                badge: 'Favorite',
                 featured: true,
-                category: 'Macarons'
+                category: 'Cake'
             },
             {
                 name: 'Red Velvet Cake',
-                price: 4.50,
-                description: 'Classic red velvet cake with smooth cream cheese frosting, perfect for any occasion.',
-                image: '',
+                price: 7000,
+                image: './assets/products/redvelvet_cake.png',
+                badge: 'Must Try',
+                featured: true,
+                category: 'Cake'
+            },
+            {
+                name: 'Chocolate Cake',
+                price: 7000,
+                image: './assets/products/chocolate_cake.png',
                 badge: 'Classic',
                 featured: true,
-                category: 'Cakes'
+                category: 'Cake'
             },
             {
-                name: 'Blueberry Muffin',
-                price: 3.50,
-                description: 'Fluffy blueberry muffins bursting with fresh blueberries and a buttery crumb topping.',
-                image: '',
+                name: 'Meat Pie',
+                price: 5000,
+                image: './assets/products/meat_pie.png',
                 badge: 'Fresh',
                 featured: true,
-                category: 'Muffins'
+                category: 'Pastry',
+                rating: 4.8
             },
             {
-                name: 'Cinnamon Roll',
-                price: 4.00,
-                description: 'Soft, gooey cinnamon rolls with sweet cream cheese icing, baked to perfection.',
-                image: '',
-                badge: 'Warm',
+                name: 'Chin Chin',
+                price: 2500,
+                image: './assets/products/chin_chin.png',
+                badge: 'Crunchy',
                 featured: true,
-                category: 'Rolls'
+                category: 'Pastry'
             },
             {
-                name: 'Fruit Danish',
-                price: 5.00,
-                description: 'Flaky Danish pastry filled with sweet cream cheese and topped with fresh seasonal fruit.',
-                image: '',
+                name: 'Cheese Steak',
+                price: 10000,
+                image: './assets/products/meat_pie.png',
                 badge: 'Flaky',
                 featured: true,
-                category: 'Danish'
+                category: 'Pastry'
             }
         ];
 
