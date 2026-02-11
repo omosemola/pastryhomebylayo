@@ -2,7 +2,7 @@
   "name": "pastryhomebylayo-backend",
   "version": "1.0.0",
   "description": "Backend API for Pastry Home by Layo e-commerce website",
-  "main": "server.js",
+  "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
     "dev": "nodemon server/server.js"
