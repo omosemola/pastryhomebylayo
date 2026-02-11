@@ -217,24 +217,94 @@ function showPaymentModal(amount) {
     }, 1000);
 
     // Confirm Payment Logic
-    document.getElementById('confirm-payment-btn').addEventListener('click', () => {
+    const confirmBtn = document.getElementById('confirm-payment-btn');
+    confirmBtn.addEventListener('click', async () => {
+
+        // Disable button to prevent double submit
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Processing...';
         clearInterval(timerInterval);
-        document.body.removeChild(modalOverlay);
-        showSuccessMessage();
+
+        // Gather Order Data
+        const customer = {
+            name: document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            address: {
+                street: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                state: 'Lagos', // Defaulting for now
+                zipCode: '00000'
+            }
+        };
+
+        const validItems = cartItems.filter(item => item.id && item.id.length === 24); // Simple ObjectId check
+
+        if (validItems.length === 0) {
+            alert('Your cart contains items from an older session. Please clear your cart and shop again.');
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = "I've Sent the Money";
+            return;
+        }
+
+        const orderData = {
+            customer,
+            items: validItems.map(item => ({
+                product: item.id,
+                name: item.title,
+                quantity: 1, // Simplified quantity
+                price: parseFloat(String(item.price).replace(/[^0-9.]/g, ''))
+            })),
+            subtotal: amount,
+            shipping: 0, // Handled separately
+            total: amount
+        };
+
+        try {
+            const res = await fetch('http://localhost:5000/api/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                document.body.removeChild(modalOverlay);
+                showSuccessMessage();
+            } else {
+                throw new Error(data.message || 'Order failed');
+            }
+
+        } catch (err) {
+            console.error('Order Error:', err);
+            alert(`Error processing order: ${err.message}`);
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = "I've Sent the Money";
+        }
     });
 }
+
+async function createOrderInBackend(amount) {
+    // This helper will be used when we have IDs.
+    // For now, checkout.js is just UI.
+    // I will refactor this properly in the next step.
+    return true;
+}
+
 
 function showSuccessMessage() {
     checkoutContent.innerHTML = `
         <div class="empty-cart-bg">
-            <div class="empty-cart-icon" style="font-size: 5rem; margin-bottom: 1.5rem;">✅</div>
-            <h1 style="font-family: var(--font-serif); font-size: 2.5rem; margin-bottom: 1rem; color: var(--color-secondary);">Payment Successful!</h1>
+            <div class="empty-cart-icon" style="font-size: 5rem; margin-bottom: 1.5rem;">🎉</div>
+            <h1 style="font-family: var(--font-serif); font-size: 2.5rem; margin-bottom: 1rem; color: var(--color-secondary);">Order Placed!</h1>
             <p style="font-size: 1.1rem; color: var(--color-gray-500); margin-bottom: 2rem; line-height: 1.6;">
-                We have received your order request. We will verify the transfer and process your delicious pastries immediately!<br>
-                Confirmation sent to your email.
+                Thank you! We have received your order.<br>
+                <strong>Status:</strong> Payment Verification Pending.<br>
+                We will notify you via email once your transfer is confirmed.
             </p>
-            <a href="index.html" class="btn btn-primary" style="display: inline-flex; padding: 1rem 2.5rem; border-radius: 50px;">
-                Continue Shopping
+            <a href="shop.html" class="btn btn-primary" style="display: inline-flex; padding: 1rem 2.5rem; border-radius: 50px;">
+                Back to Shop
             </a>
         </div>
     `;

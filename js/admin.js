@@ -72,7 +72,10 @@ async function fetchOrders() {
                     <td data-label="Status"><span class="status-badge status-${order.status}">${order.status}</span></td>
                     <td data-label="Date">${new Date(order.createdAt).toLocaleDateString()}</td>
                     <td data-label="Actions">
-                        <button onclick="updateStatus('${order._id}', 'delivered')" class="status-badge status-delivered" style="cursor:pointer; border:none;">Mark Delivered</button>
+                        <button onclick="updateStatus('${order._id}', 'delivered')" class="status-badge status-delivered" style="cursor:pointer; border:none; margin-right: 5px;">Mark Delivered</button>
+                        ${order.paymentStatus !== 'success' ?
+                        `<button onclick="confirmPayment('${order._id}')" class="status-badge status-processing" style="cursor:pointer; border:none; background-color: #16a34a;">Confirm Pay</button>`
+                        : '<span class="status-badge status-success">Paid</span>'}
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -97,6 +100,31 @@ window.updateStatus = async (id, status) => {
         fetchOrders();
     } catch (err) {
         alert('Failed to update status');
+    }
+}
+
+window.confirmPayment = async (id) => {
+    if (!confirm('Confirm payment for this order? This will notify the customer.')) return;
+    try {
+        const res = await fetch(`${API_URL}/orders/${id}/confirm-payment`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-auth-token': token
+            }
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            alert('Payment confirmed and customer notified!');
+            fetchOrders();
+        } else {
+            alert(data.message || 'Failed to confirm payment');
+        }
+    } catch (err) {
+        console.error('Payment confirmation error:', err);
+        alert('Error confirming payment');
     }
 }
 

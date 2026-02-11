@@ -540,6 +540,7 @@ function openProductModal(productCard) {
 
     // Store current product data
     currentModalProduct = {
+        id: productCard.dataset.id, // Capture ID from dataset
         title,
         price,
         badge,
@@ -617,6 +618,7 @@ function addToCartFromModal() {
 
     // Add to cart
     cartItems.push({
+        id: currentModalProduct.id,
         title: titleWithSize,
         price: finalPrice,
         color: colorMap[currentModalProduct.colorClass] || '#f3f4f6',

@@ -36,6 +36,14 @@ async function fetchShopProducts() {
 
             document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
 
+            // Fallback: Force visibility after a short delay to ensure products appear
+            // even if IntersectionObserver fails or behaves unexpectedly.
+            setTimeout(() => {
+                document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+                    el.classList.add('reveal-visible');
+                });
+            }, 500);
+
         } else {
             grid.innerHTML = '<p class="text-center" style="grid-column: 1/-1;">No products found.</p>';
         }
@@ -51,6 +59,7 @@ function createProductCard(product, index) {
     card.className = 'product-card reveal-on-scroll';
     card.style.transitionDuration = '700ms';
     card.dataset.delay = index * 100; // Stagger effect
+    card.dataset.id = product._id; // Store ID for modal logic
 
     // Determine background color based on category/name (Simple logic for visual variety)
     const bgColors = ['bg-yellow', 'bg-red', 'bg-green', 'bg-amber'];
@@ -116,7 +125,10 @@ function handleAddToCart(e, product, colorClass) {
 
     // Add to Global Cart (localStorage)
     // Matches logic in main.js
+    // Add to Global Cart (localStorage)
+    // Matches logic in main.js
     const cartItem = {
+        id: product._id, // Critical for backend order
         title: product.name,
         price: `₦${product.price.toLocaleString()}`,
         color: '#f3f4f6', // simplified color mapping

@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../models/Order');
 
+const { sendOrderConfirmation, sendAdminNotification } = require('../utils/emailService');
+
 // @route   POST /api/orders
 // @desc    Create new order
 // @access  Public
@@ -25,6 +27,10 @@ router.post('/', async (req, res) => {
             shipping: shipping || 0,
             total
         });
+
+        // Send Email Notifications (Async - don't block response)
+        sendOrderConfirmation(order).catch(err => console.error('Email Error (Customer):', err.message));
+        sendAdminNotification(order).catch(err => console.error('Email Error (Admin):', err.message));
 
         res.status(201).json({
             success: true,
@@ -62,6 +68,45 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Error fetching order',
+            error: error.message
+        });
+    }
+});
+
+// @route   PATCH /api/orders/:id/confirm-payment
+// @desc    Manually confirm payment and notify customer
+// @access  Private (Admin)
+router.patch('/:id/confirm-payment', require('../middleware/auth'), async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'Order not found' });
+        }
+
+        if (order.paymentStatus === 'success') {
+            return res.status(400).json({ success: false, message: 'Payment already confirmed' });
+        }
+
+        // Update Status
+        order.paymentStatus = 'success';
+        order.status = 'processing';
+        await order.save();
+
+        // Notify Customer
+        const { sendPaymentSuccessEmail } = require('../utils/emailService');
+        sendPaymentSuccessEmail(order).catch(err => console.error('Email Error (Payment Success):', err.message));
+
+        res.json({
+            success: true,
+            message: 'Payment confirmed & Customer notified',
+            data: order
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error confirming payment',
             error: error.message
         });
     }
