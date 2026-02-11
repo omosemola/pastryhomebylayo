@@ -14,8 +14,8 @@ const initializeEmailService = async () => {
 
         transporter = nodemailer.createTransport({
             host: gmailIp, // Use resolved IP directly
-            port: 465, // Try Port 465 (SSL)
-            secure: true, // true for 465
+            port: 587,
+            secure: false, // STARTTLS
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS
@@ -24,22 +24,19 @@ const initializeEmailService = async () => {
                 servername: 'smtp.gmail.com', // Vital for SSL verification
                 rejectUnauthorized: false
             },
-            connectionTimeout: 20000 // Increase to 20s
+            connectionTimeout: 30000 // 30 seconds
         });
 
-        console.log('📧 Email Service Initialized (IPv4 Forced)');
+        console.log(`📧 Email Service Initialized (IPv4 Forced: ${gmailIp})`);
     } catch (error) {
         console.error('❌ Failed to resolve Gmail IP:', error);
-        // Fallback to standard config if resolution fails
-        transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
-        });
+        // Throw error to see it in the test response
+        throw new Error(`DNS Resolution Failed: ${error.message}`);
     }
 };
 
 // Initialize immediately
-initializeEmailService();
+initializeEmailService().catch(err => console.error(err));
 
 const sendEmail = async (to, subject, html) => {
     try {
@@ -148,10 +145,18 @@ const sendTestEmail = async () => {
     return sendEmail(process.env.EMAIL_USER, 'Test Email from Production', 'If you see this, email is working on Render!');
 };
 
+const getDebugInfo = () => {
+    return {
+        transport: transporter ? 'Initialized' : 'Not Initialized',
+        host: transporter && transporter.options ? transporter.options.host : 'Unknown'
+    };
+};
+
 module.exports = {
     sendOrderConfirmation,
     sendAdminNotification,
     sendPaymentSuccessEmail,
     sendOrderDeliveredEmail,
-    sendTestEmail
+    sendTestEmail,
+    getDebugInfo
 };
