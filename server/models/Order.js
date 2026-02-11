@@ -4,7 +4,12 @@ const orderSchema = new mongoose.Schema({
     orderNumber: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        default: function () {
+            const timestamp = Date.now().toString().slice(-6);
+            const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            return `ORD-${timestamp}${random}`;
+        }
     },
     customer: {
         name: {
@@ -73,14 +78,6 @@ const orderSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Generate order number before saving
-orderSchema.pre('save', async function (next) {
-    if (!this.orderNumber) {
-        const timestamp = Date.now().toString().slice(-6);
-        const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-        this.orderNumber = `ORD-${timestamp}${random}`;
-    }
-    next();
-});
+
 
 module.exports = mongoose.model('Order', orderSchema);
