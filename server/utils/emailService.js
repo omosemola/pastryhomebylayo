@@ -8,6 +8,11 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+// Debug: Check if env vars are loaded
+console.log('📧 Email Service Initialized');
+console.log('   User:', process.env.EMAIL_USER ? 'SET' : 'MISSING');
+console.log('   Pass:', process.env.EMAIL_PASS ? 'SET (Length: ' + process.env.EMAIL_PASS.length + ')' : 'MISSING');
+
 const sendEmail = async (to, subject, html) => {
     try {
         const mailOptions = {
