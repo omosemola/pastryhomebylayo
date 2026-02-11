@@ -4,14 +4,15 @@ const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
     secure: false, // use false for STARTTLS; true for 465
+    family: 4, // Force IPv4 (Critical for Render)
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
     tls: {
-        rejectUnauthorized: false // Helps avoiding self-signed cert errors
+        rejectUnauthorized: false
     },
-    connectionTimeout: 10000 // 10 seconds
+    connectionTimeout: 10000
 });
 
 // Debug: Check if env vars are loaded
