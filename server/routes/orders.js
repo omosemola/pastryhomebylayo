@@ -38,10 +38,13 @@ router.post('/', async (req, res) => {
             data: order
         });
     } catch (error) {
+        console.error('Order Creation Error:', error); // Log to server console
         res.status(500).json({
             success: false,
             message: 'Error creating order',
-            error: error.message
+            error: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+            details: error.errors // Mongoose validation errors
         });
     }
 });
