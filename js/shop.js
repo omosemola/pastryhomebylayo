@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:5000/api';
+// API_URL is now defined in config.js
+// const API_URL = 'http://localhost:5000/api';
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchShopProducts();

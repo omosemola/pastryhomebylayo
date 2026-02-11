@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:5000/api';
+// API_URL is defined in config.js
+// const API_URL = 'http://localhost:5000/api';
 console.log('Admin Script Loaded'); // Verify script execution
 const token = localStorage.getItem('adminToken');
 

@@ -13,7 +13,11 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors());
+// Middleware
+app.use(cors({
+    origin: '*', // Allow all origins for now (simplifies initial deployment)
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
