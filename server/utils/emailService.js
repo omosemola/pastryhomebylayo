@@ -1,7 +1,8 @@
 const axios = require('axios');
 
 const sendEmail = async (to, subject, htmlContent) => {
-    const apiKey = process.env.BREVO_API_KEY;
+    const apiKey = process.env.BREVO_API_KEY ? process.env.BREVO_API_KEY.trim() : null;
+    const senderEmail = process.env.EMAIL_USER ? process.env.EMAIL_USER.trim() : null;
 
     if (!apiKey) {
         console.error('❌ BREVO_API_KEY is missing in environment variables');
@@ -14,7 +15,7 @@ const sendEmail = async (to, subject, htmlContent) => {
             {
                 sender: {
                     name: "Pastry Home by Layo",
-                    email: process.env.EMAIL_USER // Validated sender in Brevo
+                    email: senderEmail // Validated sender in Brevo
                 },
                 to: [{ email: to }],
                 subject: subject,
