@@ -141,8 +141,65 @@ const sendOrderDeliveredEmail = async (order) => {
     return sendEmail(order.customer.email, `Order Delivered - ${order.orderNumber}`, html);
 };
 
+const net = require('net');
+
+const testConnection = (port) => {
+    return new Promise((resolve, reject) => {
+        console.log(`🔌 Testing TCP connection to smtp.gmail.com:${port}...`);
+        const socket = new net.Socket();
+        let status = 'pending';
+
+        // Timeout after 5s
+        socket.setTimeout(5000);
+
+        socket.on('connect', () => {
+            console.log(`✅ Connected to smtp.gmail.com:${port}`);
+            status = 'success';
+            socket.destroy();
+            resolve(true);
+        });
+
+        socket.on('timeout', () => {
+            console.log(`❌ Timeout connecting to smtp.gmail.com:${port}`);
+            status = 'timeout';
+            socket.destroy();
+            reject(new Error('Connection Timed Out'));
+        });
+
+        socket.on('error', (err) => {
+            console.log(`❌ Error connecting to smtp.gmail.com:${port}:`, err.message);
+            reject(err);
+        });
+
+        socket.connect(port, 'smtp.gmail.com');
+    });
+};
+
 const sendTestEmail = async () => {
-    return sendEmail(process.env.EMAIL_USER, 'Test Email from Production', 'If you see this, email is working on Render!');
+    // 1. Pre-flight Network Check
+    const results = { port587: 'failed', port465: 'failed' };
+
+    try {
+        await testConnection(587);
+        results.port587 = 'success';
+    } catch (e) { results.port587 = e.message; }
+
+    try {
+        await testConnection(465);
+        results.port465 = 'success';
+    } catch (e) { results.port465 = e.message; }
+
+    if (results.port587 !== 'success' && results.port465 !== 'success') {
+        throw new Error(`NETWORK BLOCK DETECTED. Port 587: ${results.port587}, Port 465: ${results.port465}`);
+    }
+
+    // 2. If valid, try sending (Reusing previous robust config logic)
+    // We re-init here to ensure we use the working config if possible, 
+    // but for now let's just use the default transport if check passes.
+    if (!transporter) await initializeEmailService();
+
+    return sendEmail(process.env.EMAIL_USER, 'Test Email from Production',
+        `Network Check: Passed!\nPort 587: ${results.port587}\nPort 465: ${results.port465}\n\nEmail sent successfully.`);
 };
 
 const getDebugInfo = () => {
