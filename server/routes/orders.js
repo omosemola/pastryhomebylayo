@@ -49,6 +49,20 @@ router.post('/', async (req, res) => {
     }
 });
 
+// @route   GET /api/orders/test-email
+// @desc    Test email sending from production
+// @access  Public
+router.get('/test-email', async (req, res) => {
+    try {
+        const { sendTestEmail } = require('../utils/emailService');
+        const result = await sendTestEmail();
+        res.json({ success: true, message: 'Email sent successfully', info: result });
+    } catch (error) {
+        console.error('Test Email Failed:', error);
+        res.status(500).json({ success: false, message: 'Email failed', error: error.message, stack: error.stack });
+    }
+});
+
 // @route   GET /api/orders/:id
 // @desc    Get order by ID
 // @access  Public
