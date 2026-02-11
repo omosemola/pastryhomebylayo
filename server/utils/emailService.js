@@ -97,8 +97,29 @@ const sendPaymentSuccessEmail = async (order) => {
     return sendEmail(order.customer.email, `Payment Confirmed - ${order.orderNumber}`, html);
 };
 
+const sendOrderDeliveredEmail = async (order) => {
+    const html = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #2563eb;">Order Delivered! 📦</h2>
+            <p>Dear ${order.customer.name},</p>
+            <p>Your order <strong>${order.orderNumber}</strong> has been delivered.</p>
+            <p>We hope you enjoy your pastries! 🧁</p>
+            
+            <p>Thank you for choosing Pastry Home by Layo!</p>
+        </div>
+    `;
+
+    return sendEmail(order.customer.email, `Order Delivered - ${order.orderNumber}`, html);
+};
+
+const sendTestEmail = async () => {
+    return sendEmail(process.env.EMAIL_USER, 'Test Email from Production', 'If you see this, email is working on Render!');
+};
+
 module.exports = {
     sendOrderConfirmation,
     sendAdminNotification,
-    sendPaymentSuccessEmail
+    sendPaymentSuccessEmail,
+    sendOrderDeliveredEmail,
+    sendTestEmail
 };

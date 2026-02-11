@@ -115,6 +115,20 @@ router.patch('/:id/confirm-payment', require('../middleware/auth'), async (req, 
     }
 });
 
+// @route   GET /api/orders/test-email
+// @desc    Test email sending from production
+// @access  Public
+router.get('/test-email', async (req, res) => {
+    try {
+        const { sendTestEmail } = require('../utils/emailService');
+        const result = await sendTestEmail();
+        res.json({ success: true, message: 'Email sent successfully', info: result });
+    } catch (error) {
+        console.error('Test Email Failed:', error);
+        res.status(500).json({ success: false, message: 'Email failed', error: error.message, stack: error.stack });
+    }
+});
+
 // @route   PATCH /api/orders/:id/status
 // @desc    Update order status
 // @access  Public (should be protected in production)
@@ -126,13 +140,19 @@ router.patch('/:id/status', async (req, res) => {
             req.params.id,
             { status },
             { new: true, runValidators: true }
-        );
+        ).populate('customer.name customer.email'); // Ensure customer email is available
 
         if (!order) {
             return res.status(404).json({
                 success: false,
                 message: 'Order not found'
             });
+        }
+
+        // Send Email if status is 'delivered'
+        if (status === 'delivered') {
+            const { sendOrderDeliveredEmail } = require('../utils/emailService');
+            sendOrderDeliveredEmail(order).catch(err => console.error('Email Error (Delivered):', err.message));
         }
 
         res.json({
