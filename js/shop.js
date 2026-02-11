@@ -9,11 +9,23 @@ async function fetchShopProducts() {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
 
+    // DEBUG LOGGING
+    console.log('🛒 Fetching products...');
+    console.log('🌍 API URL Base:', API_URL);
+    const targetUrl = `${API_URL}/products`;
+    console.log('🎯 Target Endpoint:', targetUrl);
+
     try {
-        const res = await fetch(`${API_URL}/products`);
-        if (!res.ok) throw new Error('Failed to fetch products');
+        const res = await fetch(targetUrl);
+        console.log('📡 Response Status:', res.status);
+
+        if (!res.ok) {
+            console.error('❌ API Verification Failed:', res.status, res.statusText);
+            throw new Error(`Failed to fetch products: ${res.status} ${res.statusText}`);
+        }
 
         const data = await res.json();
+        console.log('📦 Data Received:', data);
 
         if (data.success && data.data.length > 0) {
             grid.innerHTML = ''; // Clear loading spinner
