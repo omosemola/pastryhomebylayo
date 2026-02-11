@@ -9,7 +9,7 @@ const CONFIG = {
     // If we are on Netlify (or anywhere else), use the Render URL
     API_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
         ? 'http://localhost:5000/api'
-        : 'https://pastryhome-backend.onrender.com/api' // Placeholder - User will verify this URL
+        : 'https://pastryhomebylayo.onrender.com/api' // Production URL
 };
 
 // Expose strictly what's needed
