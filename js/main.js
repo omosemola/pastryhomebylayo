@@ -17,13 +17,13 @@ const cartIconBtn = document.querySelector('.cart-btn');
 // Data for Gallery
 const works = [
     { id: 1, title: 'Wedding Elegance', image: './assets/cakes/cake1.png' },
+    { id: 8, title: 'Classic White', image: './assets/cakes/cake8.png' },
+    { id: 6, title: 'Royal Tier', image: './assets/cakes/cake6.png' },
+    { id: 7, title: 'Golden Touch', image: './assets/cakes/cake7.png' },
+    { id: 5, title: 'Pastel Perfection', image: './assets/cakes/cake5.png' },
     { id: 2, title: 'Chocolate Dream', image: './assets/cakes/cake2.png' },
     { id: 3, title: 'Floral Fantasy', image: './assets/cakes/cake3.png' },
     { id: 4, title: 'Birthday Bash', image: './assets/cakes/cake4.png' },
-    { id: 5, title: 'Pastel Perfection', image: './assets/cakes/cake5.png' },
-    { id: 6, title: 'Royal Tier', image: './assets/cakes/cake6.png' },
-    { id: 7, title: 'Golden Touch', image: './assets/cakes/cake7.png' },
-    { id: 8, title: 'Classic White', image: './assets/cakes/cake8.png' },
     { id: 9, title: 'Modern Art', image: './assets/cakes/cake9.png' },
 ];
 

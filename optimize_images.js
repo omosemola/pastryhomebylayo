@@ -62,16 +62,7 @@ async function optimizeImages() {
             await sharp(file)
                 .resize({ width: width, withoutEnlargement: true })
                 .jpeg({ quality: QUALITY, mozjpeg: true }) // Convert everything to JPEG for max compat/size ratio? Or WebP?
-            // Let's keep original format if possible, but convert PNG to JPEG if photo?
-            // Actually, let's just use .toBuffer and overwrite
-            // For PNGs (often transparent), valid to keep PNG but compress
-            // For Banner (7MB png), probably no transparency? 
-
-            // Actually, let's just make everything WebP? No, browser support is good but let's stick to optimize in place.
-
-            // Strategy: 
-            // 1. Resize to reasonable max width
-            // 2. Compress
+      
 
             let pipeline = sharp(file).resize({ width: width, withoutEnlargement: true });
 
