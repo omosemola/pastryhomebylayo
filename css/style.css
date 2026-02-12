@@ -3613,51 +3613,57 @@ button {
 }
 
 .order-item-title {
-  font-weight: 700;
+  font-weight: 600;
   font-family: var(--font-serif);
   color: var(--color-secondary);
-  font-size: 1rem;
-  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.15rem;
 }
 
 .order-item-price {
-  color: var(--color-primary);
-  font-weight: 700;
-  font-size: 0.95rem;
+  color: var(--color-gray-600);
+  font-weight: 600;
+  font-size: 0.85rem;
 }
 
 .order-summary-totals {
-  background: var(--color-gray-100);
+  background: white;
+  border: 1px solid var(--color-gray-100);
   padding: 1.5rem;
   border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
 }
 
 .summary-row {
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.75rem;
-  font-size: 0.95rem;
-  color: var(--color-gray-600);
+  font-size: 0.85rem;
+  color: var(--color-gray-500);
 }
 
 .summary-row span:last-child {
   font-weight: 600;
-  color: var(--color-secondary);
+  color: var(--color-gray-700);
 }
 
 .summary-row.total {
-  font-size: 1.25rem;
-  font-weight: 800;
+  font-size: 1rem;
+  font-weight: 700;
   font-family: var(--font-serif);
   color: var(--color-secondary);
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 2px solid rgba(0, 0, 0, 0.05);
-  margin-bottom: 0;
+  background-color: var(--color-gray-50);
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-gray-200);
+  align-items: center;
 }
 
 .summary-row.total .amount {
-  color: var(--color-primary);
+  color: var(--color-secondary);
+  font-size: 1.25rem;
+  font-weight: 800;
 }
 
 .back-link {
