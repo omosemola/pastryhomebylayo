@@ -120,11 +120,25 @@ const sendOrderDeliveredEmail = async (order) => {
     return sendEmail(order.customer.email, `Order Delivered - ${order.orderNumber}`, html);
 };
 
-const sendTestEmail = async () => {
+const sendContactEmail = async ({ name, email, subject, message }) => {
+    const html = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #d97706;">New Contact Inquiry 📩</h2>
+            <p><strong>From:</strong> ${name} (${email})</p>
+            <p><strong>Subject:</strong> ${subject || 'No Subject'}</p>
+            <div style="background: #fdf2f8; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                <p><strong>Message:</strong></p>
+                <p style="white-space: pre-wrap;">${message}</p>
+            </div>
+            <p>Reply directly to this email to respond to the customer.</p>
+        </div>
+    `;
+
+    // Send to Admin (EMAIL_USER)
     return sendEmail(
         process.env.EMAIL_USER,
-        'Test Email from Brevo API',
-        '<h3>It Works! 🎉</h3><p>If you see this, the Brevo API is successfully sending emails from Render!</p>'
+        `Contact: ${subject || 'New Inquiry'} from ${name}`,
+        html
     );
 };
 
@@ -133,5 +147,6 @@ module.exports = {
     sendAdminNotification,
     sendPaymentSuccessEmail,
     sendOrderDeliveredEmail,
-    sendTestEmail
+    sendTestEmail,
+    sendContactEmail
 };

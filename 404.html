@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Pastry Home by Layo</title>
+    <link rel="icon" type="image/png" href="./assets/logo.png">
+    <link href="./css/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Spartan:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: var(--color-background);
+        }
+
+        .error-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .error-code {
+            font-size: 6rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 0;
+            line-height: 1;
+        }
+
+        .error-title {
+            font-size: 2rem;
+            color: var(--color-secondary);
+            margin-bottom: 1rem;
+            font-family: 'Libre Baskerville', serif;
+        }
+
+        .error-text {
+            color: var(--color-gray-500);
+            max-width: 500px;
+            margin-bottom: 2rem;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav id="navbar" class="navbar" style="background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <div class="container flex items-center justify-between">
+            <a href="index.html" class="logo">
+                <img src="./assets/logo.png" alt="Pastry Home by Layo">
+            </a>
+        </div>
+    </nav>
+
+    <div class="error-container">
+        <div class="error-icon">🧁</div>
+        <h1 class="error-code">404</h1>
+        <h2 class="error-title">Oops! Stale Link?</h2>
+        <p class="error-text">The page you're looking for seems to have crumbled away. But don't worry, we have plenty
+            of fresh pastries waiting for you on the homepage.</p>
+        <a href="index.html" class="btn btn-primary">Back to Home</a>
+    </div>
+
+</body>
+
+</html>
