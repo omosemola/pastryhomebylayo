@@ -68,7 +68,7 @@ const seedProducts = async () => {
             {
                 name: 'Cheese Steak',
                 price: 10000,
-                image: './assets/products/meat_pie.png',
+                image: './assets/products/cheese_steak.png',
                 badge: 'Flaky',
                 featured: true,
                 category: 'Pastry'
