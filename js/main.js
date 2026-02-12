@@ -87,12 +87,16 @@ let cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
 let cartCount = cartItems.length;
 
 function updateCartUI() {
-    cartCountEl.textContent = cartCount;
+    if (cartCountEl) {
+        cartCountEl.textContent = cartCount;
+    }
 
     // Animate Cart Icon
-    cartIconBtn.classList.remove('bump');
-    void cartIconBtn.offsetWidth; // Force reflow
-    cartIconBtn.classList.add('bump');
+    if (cartIconBtn) {
+        cartIconBtn.classList.remove('bump');
+        void cartIconBtn.offsetWidth; // Force reflow
+        cartIconBtn.classList.add('bump');
+    }
 
     // Update Cart Sidebar Content
     renderCartItems();

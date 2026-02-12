@@ -1,5 +1,6 @@
 // Get cart items from localStorage
-const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+// cartItems is already declared in main.js
+// const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
 const checkoutContent = document.getElementById('checkout-content');
 
 // Formatting utility
