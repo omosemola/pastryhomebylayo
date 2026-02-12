@@ -3701,3 +3701,107 @@ button {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
+/* =========================================
+   Events Catering Section
+   ========================================= */
+.section-events {
+  padding: 5rem 0;
+  background-color: var(--color-white);
+  overflow: hidden;
+  position: relative;
+}
+
+.events-header {
+  margin-bottom: 3rem;
+  z-index: 10;
+  position: relative;
+}
+
+.section-subtitle {
+  color: var(--color-primary);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+/* Spiral Banner */
+.spiral-banner-container {
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4rem;
+}
+
+.spiral-banner-img {
+  width: 100%;
+  height: 100%;
+  background: url('../assets/events/events1.jpg') no-repeat center center/cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+  /* Initial state handled by JS or default */
+  transform: scale(1.5) rotate(10deg);
+  transition: transform 0.1s linear;
+  /* Smooth scroll update */
+}
+
+/* Events Slider */
+.events-slider-container {
+  width: 100%;
+  overflow: hidden;
+  padding: 2rem 0;
+  position: relative;
+}
+
+.events-track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  /* Smooth easing */
+  gap: 1rem;
+  padding-left: 50%;
+  /* Center the active slide */
+}
+
+.event-slide {
+  min-width: 300px;
+  height: 200px;
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  transition: all 0.5s ease;
+  opacity: 0.6;
+  transform: scale(0.9);
+}
+
+.event-slide.active {
+  opacity: 1;
+  transform: scale(1.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  border: 2px solid var(--color-primary);
+}
+
+.event-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 768px) {
+  .spiral-banner-container {
+    height: 500px;
+  }
+
+  .event-slide {
+    min-width: 400px;
+    height: 300px;
+  }
+}
