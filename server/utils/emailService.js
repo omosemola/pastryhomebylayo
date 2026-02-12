@@ -83,7 +83,7 @@ const sendAdminNotification = async (order) => {
             <p><strong>Order ID:</strong> ${order.orderNumber}</p>
             <p><strong>Total:</strong> ₦${order.total.toLocaleString()}</p>
             
-            <a href="${process.env.FRONTEND_URL}/admin.html" style="display: inline-block; background: #000; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Go to Admin Dashboard</a>
+            <a href="https://pastryhomebylayo.netlify.app/admin.html" style="display: inline-block; background: #000; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Go to Admin Dashboard</a>
         </div>
     `;
 
