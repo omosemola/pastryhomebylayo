@@ -1174,7 +1174,7 @@ button {
    6. Shop Section (Grid)
    ========================================= */
 .section-shop {
-  background-color: white;
+  background-color: transparent;
   width: 80%;
   margin: 0 auto;
 }
