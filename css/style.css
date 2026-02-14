@@ -558,10 +558,10 @@ button {
   overflow: hidden;
 }
 
-/* Mobile background override to ensure visibility */
+/* Mobile background override to ensure visibility - using GIF fallback */
 @media (max-width: 768px) {
   .hero {
-    background-image: url('../assets/hero1.webp');
+    background-image: url('../assets/hero1_mobile.gif');
   }
 }
 
