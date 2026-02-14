@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const contactForm = document.querySelector('form');
+    const contactForm = document.getElementById('contact-form');
     const submitBtn = document.querySelector('.contact-submit-btn');
 
     if (!contactForm) return;
