@@ -59,10 +59,8 @@ async function optimizeImages() {
             const tempFile = file + '.tmp';
             const width = filename.includes('cake') || filename.includes('product') ? PRODUCT_WIDTH : MAX_WIDTH;
 
-            await sharp(file)
-                .resize({ width: width, withoutEnlargement: true })
-                .jpeg({ quality: QUALITY, mozjpeg: true }) // Convert everything to JPEG for max compat/size ratio? Or WebP?
-      
+
+
 
             let pipeline = sharp(file).resize({ width: width, withoutEnlargement: true });
 

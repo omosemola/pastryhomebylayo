@@ -88,7 +88,7 @@ function createProductCard(product, index) {
 
     card.innerHTML = `
         <div class="product-image-container ${randomBg}">
-            <img src="${product.image}" alt="${product.name}" 
+            <img src="${product.image}" loading="lazy" alt="${product.name}" 
                 style="width: 100%; height: 100%; object-fit: cover;"
                 onerror="this.src='./assets/logo.png'"> <!-- Fallback image -->
         </div>
