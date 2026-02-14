@@ -554,14 +554,14 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url('../assets/hero1.webp') no-repeat center center/cover;
+  background: url('../assets/hero1.gif') no-repeat center center/cover;
   overflow: hidden;
 }
 
-/* Mobile background override to ensure visibility - using GIF fallback */
+/* Mobile background override explicitly set to same GIF for safety */
 @media (max-width: 768px) {
   .hero {
-    background-image: url('../assets/hero1_mobile.gif');
+    background-image: url('../assets/hero1.gif');
   }
 }
 
