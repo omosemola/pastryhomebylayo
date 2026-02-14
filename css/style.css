@@ -558,7 +558,12 @@ button {
   overflow: hidden;
 }
 
-/* Mobile background override removed to use hero1.gif consistently */
+/* Mobile background override to ensure visibility */
+@media (max-width: 768px) {
+  .hero {
+    background-image: url('../assets/hero1.webp');
+  }
+}
 
 /* Dark Overlay */
 .hero::before {
