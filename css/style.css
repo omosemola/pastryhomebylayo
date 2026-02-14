@@ -13,9 +13,14 @@
   --color-primary: #f2c5d3;
   --color-secondary: #1B4D3E;
   --color-accent: #fef0f0;
+  --color-accent: #fef0f0;
   --color-white: #FFFAFA;
   --color-gray-100: #f3f4f6;
   --color-gray-400: #9ca3af;
+
+  /* Backgrounds */
+  --bg-white: #fff5f8;
+  /* Touch of pink */
   --color-gray-500: #6b7280;
   --color-gray-600: #4b5563;
   --color-gray-700: #374151;
