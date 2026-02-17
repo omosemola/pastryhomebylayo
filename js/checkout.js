@@ -42,7 +42,7 @@ function renderCheckout() {
                 <h2 class="section-title">Customer Information</h2>
                 <form id="checkout-form">
                     <div class="form-group">
-                        <label class="form-label" for="email">Email Address</label>
+                        <label class="form-label" for="email">Email Address <span style="color: red;">*</span></label>
                         <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
                     </div>
 
@@ -50,27 +50,27 @@ function renderCheckout() {
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="firstName">First Name</label>
+                            <label class="form-label" for="firstName">First Name <span style="color: red;">*</span></label>
                             <input type="text" id="firstName" class="form-input" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="lastName">Last Name</label>
+                            <label class="form-label" for="lastName">Last Name <span style="color: red;">*</span></label>
                             <input type="text" id="lastName" class="form-input" required>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="address">Street Address</label>
+                        <label class="form-label" for="address">Street Address <span style="color: red;">*</span></label>
                         <input type="text" id="address" class="form-input" required>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="city">City</label>
+                            <label class="form-label" for="city">City <span style="color: red;">*</span></label>
                             <input type="text" id="city" class="form-input" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="phone">Phone Number</label>
+                            <label class="form-label" for="phone">Phone Number <span style="color: red;">*</span></label>
                             <input type="tel" id="phone" class="form-input" required>
                         </div>
                     </div>
