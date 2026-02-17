@@ -100,8 +100,8 @@ function createProductCard(product, index) {
             <h3 class="product-title">${product.name}</h3>
             <div class="price-row">
                 <span class="price">${formattedPrice}</span>
-                <button class="text-link-btn add-to-cart-btn" data-id="${product._id}">
-                    <i class="fa-solid fa-cart-arrow-down"></i>
+                <button class="add-to-cart-btn-styled" data-id="${product._id}">
+                    Add to Cart
                 </button>
             </div>
         </div>
@@ -110,7 +110,7 @@ function createProductCard(product, index) {
     // Click Event for Modal
     card.addEventListener('click', (e) => {
         // Prevent opening if clicking specific buttons
-        if (e.target.closest('.add-to-cart-btn')) return;
+        if (e.target.closest('.add-to-cart-btn-styled')) return;
 
         if (window.openProductModal) {
             window.openProductModal(card);
@@ -118,7 +118,7 @@ function createProductCard(product, index) {
     });
 
     // Click Event for Add to Cart
-    const addBtn = card.querySelector('.add-to-cart-btn');
+    const addBtn = card.querySelector('.add-to-cart-btn-styled');
     if (addBtn) {
         addBtn.addEventListener('click', (e) => {
             e.stopPropagation(); // Stop bubbling to card
@@ -132,8 +132,6 @@ function createProductCard(product, index) {
 function handleAddToCart(e, product, colorClass) {
     const btn = e.currentTarget;
 
-    // Add to Global Cart (localStorage)
-    // Matches logic in main.js
     // Add to Global Cart (localStorage)
     // Matches logic in main.js
     const cartItem = {
@@ -152,18 +150,15 @@ function handleAddToCart(e, product, colorClass) {
     // Update UI using exposed method from main.js
     if (window.refreshGlobalCart) {
         window.refreshGlobalCart();
-    } else {
-        // Fallback
-        location.reload();
     }
 
     // Animate Button
-    const originalHTML = btn.innerHTML;
-    btn.innerHTML = 'Added!';
+    const originalText = btn.textContent;
+    btn.textContent = 'Adding...';
     btn.classList.add('added-feedback');
 
     setTimeout(() => {
-        btn.innerHTML = originalHTML;
-        btn.classList.remove('added-feedback');
-    }, 1000);
+        // Redirect to Cart Page
+        window.location.href = 'cart.html';
+    }, 500);
 }
