@@ -100,8 +100,8 @@ function createProductCard(product, index) {
             <h3 class="product-title">${product.name}</h3>
             <div class="price-row">
                 <span class="price">${formattedPrice}</span>
-                <button class="add-to-cart-btn-styled" data-id="${product._id}">
-                    Add to Cart
+                <button class="text-link-btn add-to-cart-btn" data-id="${product._id}">
+                    <i class="fa-solid fa-cart-arrow-down"></i>
                 </button>
             </div>
         </div>
@@ -110,7 +110,7 @@ function createProductCard(product, index) {
     // Click Event for Modal
     card.addEventListener('click', (e) => {
         // Prevent opening if clicking specific buttons
-        if (e.target.closest('.add-to-cart-btn-styled')) return;
+        if (e.target.closest('.add-to-cart-btn')) return;
 
         if (window.openProductModal) {
             window.openProductModal(card);
@@ -118,7 +118,7 @@ function createProductCard(product, index) {
     });
 
     // Click Event for Add to Cart
-    const addBtn = card.querySelector('.add-to-cart-btn-styled');
+    const addBtn = card.querySelector('.add-to-cart-btn');
     if (addBtn) {
         addBtn.addEventListener('click', (e) => {
             e.stopPropagation(); // Stop bubbling to card
@@ -153,12 +153,12 @@ function handleAddToCart(e, product, colorClass) {
     }
 
     // Animate Button
-    const originalText = btn.textContent;
-    btn.textContent = 'Adding...';
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-check"></i>'; // Checkmark icon
     btn.classList.add('added-feedback');
 
     setTimeout(() => {
-        // Redirect to Cart Page
-        window.location.href = 'cart.html';
-    }, 500);
+        btn.innerHTML = originalHTML;
+        btn.classList.remove('added-feedback');
+    }, 1500);
 }
