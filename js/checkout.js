@@ -23,8 +23,6 @@ function renderCheckout() {
         return;
     }
 
-    const PROMO_DISCOUNT = 0.20;
-
     // Base Totals (calculate both original and discounted)
     let originalSubtotal = 0;
     let discountedSubtotal = 0;
