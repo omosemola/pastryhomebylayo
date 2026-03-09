@@ -9,7 +9,8 @@ const sliderTrack = document.getElementById('slider-track');
 const prevBtn = document.getElementById('prev-slide');
 const nextBtn = document.getElementById('next-slide');
 
-// Cart Elements
+// Cart & Promo Data
+const PROMO_DISCOUNT = 0.20; // 20% promo discount
 const cartBtns = document.querySelectorAll('.add-btn, .text-link-btn');
 const cartCountEl = document.querySelector('.cart-count');
 const cartIconBtn = document.querySelector('.cart-btn');
@@ -711,7 +712,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- New Render Logic (Added to fix cart page rendering) ---
-const PROMO_DISCOUNT = 0.20; // 20% promo discount
 
 function renderCartItems() {
     // Generate an array of items with correct display prices (for UI only)
