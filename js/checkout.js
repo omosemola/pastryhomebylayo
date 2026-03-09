@@ -23,17 +23,15 @@ function renderCheckout() {
         return;
     }
 
-    // Calculate totals
+    // Base Totals
     const subtotal = cartItems.reduce((sum, item) => {
-        // Handle price strings like "₦5,000.00" or simple numbers
         const priceString = String(item.price).replace(/[^0-9.]/g, '');
         return sum + (parseFloat(priceString) || 0);
     }, 0);
 
-    // Tax and Shipping (simplified for Bank Transfer context)
-    const tax = 0; // Removing tax for simplicity unless requested
-    const shipping = 0; // Shipping is handled via instructions
-    const total = subtotal + tax + shipping;
+    const tax = 0;
+    let shipping = 1000; // Default to option 1
+    let total = subtotal + tax + shipping;
 
     checkoutContent.innerHTML = `
         <div class="checkout-grid">
@@ -76,16 +74,25 @@ function renderCheckout() {
                     </div>
 
                     <div class="form-group" style="margin-top: 2rem; background: var(--color-gray-100); padding: 1.5rem; border-radius: 1rem;">
-                        <span style="font-weight: 700; color: var(--color-secondary); display: block; margin-bottom: 0.5rem;">
-                            <i data-lucide="info" style="width: 1rem; height: 1rem; vertical-align: middle; margin-right: 0.5rem;"></i>
-                            Delivery Information
+                        <span style="font-weight: 700; color: var(--color-secondary); display: block; margin-bottom: 1rem;">
+                            <i data-lucide="truck" style="width: 1rem; height: 1rem; vertical-align: middle; margin-right: 0.5rem;"></i>
+                            Delivery Options <span style="color: red;">*</span>
                         </span>
-                        <p style="font-size: 0.9rem; color: var(--color-gray-600); line-height: 1.6;">
-                            Delivery within Magboro is <strong>₦1,500</strong>. Delivery outside Magboro is between <strong>₦2,500 - ₦5,000</strong> depending on your location. Please add this to your transfer.
+                        
+                        <div class="form-group">
+                            <select id="delivery-option" class="form-input" style="padding: 1rem; font-family: var(--font-body); font-size: 1rem; cursor: pointer;">
+                                <option value="1000">Magboro (₦1,000)</option>
+                                <option value="1500">Makogi (₦1,500)</option>
+                                <option value="2000">Mowe, Ibafo, Arepo & Opic (₦2,000)</option>
+                                <option value="contact">Anywhere inside Lagos (Contact Customer Care)</option>
+                            </select>
+                        </div>
+                        <p id="delivery-contact-note" style="display: none; font-size: 0.85rem; color: #dc2626; margin-top: 0.5rem; font-weight: 600;">
+                            Please contact Customer Care (+234 903 470 7684) for delivery information before proceeding if you are outside the standard zones.
                         </p>
                     </div>
 
-                    <button type="submit" class="btn btn-primary checkout-submit-btn">
+                    <button type="submit" class="btn btn-primary checkout-submit-btn" id="main-checkout-btn">
                         Proceed to Pay - ${formatCurrency(total)}
                     </button>
                     <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--color-gray-500);">
@@ -118,12 +125,12 @@ function renderCheckout() {
                         <span>${formatCurrency(subtotal)}</span>
                     </div>
                     <div class="summary-row">
-                        <span>Delivery</span>
-                        <span>See Instructions</span>
+                        <span>Delivery Fee</span>
+                        <span id="summary-delivery">${formatCurrency(shipping)}</span>
                     </div>
                     <div class="summary-row total">
-                        <span>Total (Excl. Delivery)</span>
-                        <span class="amount">${formatCurrency(total)}</span>
+                        <span>Total To Pay</span>
+                        <span class="amount" id="summary-total">${formatCurrency(total)}</span>
                     </div>
                 </div>
             </div>
@@ -133,15 +140,52 @@ function renderCheckout() {
     // Initialize icons
     lucide.createIcons();
 
+    // Handle Delivery Option Change
+    const deliverySelect = document.getElementById('delivery-option');
+    const mainCheckoutBtn = document.getElementById('main-checkout-btn');
+    const summaryDelivery = document.getElementById('summary-delivery');
+    const summaryTotal = document.getElementById('summary-total');
+    const deliveryNote = document.getElementById('delivery-contact-note');
+
+    let currentShipping = shipping;
+    let currentTotal = total;
+    let deliveryLabel = "Magboro";
+
+    deliverySelect.addEventListener('change', (e) => {
+        const val = e.target.value;
+        const selectedText = e.target.options[e.target.selectedIndex].text;
+
+        if (val === 'contact') {
+            currentShipping = 0;
+            deliveryNote.style.display = 'block';
+            summaryDelivery.textContent = "To Be Communicated";
+            mainCheckoutBtn.innerHTML = `Proceed to Pay Base Amount - ${formatCurrency(subtotal)}`;
+            deliveryLabel = selectedText;
+        } else {
+            currentShipping = parseFloat(val);
+            deliveryNote.style.display = 'none';
+            summaryDelivery.textContent = formatCurrency(currentShipping);
+            deliveryLabel = selectedText;
+        }
+
+        currentTotal = subtotal + tax + currentShipping;
+
+        if (val !== 'contact') {
+            mainCheckoutBtn.innerHTML = `Proceed to Pay - ${formatCurrency(currentTotal)}`;
+        }
+
+        summaryTotal.textContent = formatCurrency(currentTotal);
+    });
+
     // Handle form submission
     const form = document.getElementById('checkout-form');
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-        showPaymentModal(total);
+        showPaymentModal({ total: currentTotal, shipping: currentShipping, label: deliveryLabel, isContact: deliverySelect.value === 'contact' });
     });
 }
 
-function showPaymentModal(amount) {
+function showPaymentModal(paymentInfo) {
     // Create Modal Element
     const modalOverlay = document.createElement('div');
     modalOverlay.className = 'payment-modal-overlay';
@@ -175,12 +219,15 @@ function showPaymentModal(amount) {
 
                 <div class="payment-amount-box">
                     <p>Amount to Transfer</p>
-                    <h2>${formatCurrency(amount)} <span>+ Delivery Fee</span></h2>
+                    <h2>${formatCurrency(paymentInfo.total)}</h2>
                 </div>
 
                 <div class="delivery-note">
                     <i data-lucide="truck"></i>
-                    <p><strong>Reminder:</strong> Add roughly <strong>₦1,500</strong> (Magboro) or <strong>₦2,500-₦5,000</strong> (Outside) for delivery.</p>
+                    <p>
+                        <strong>Delivery:</strong> ${paymentInfo.label} 
+                        ${paymentInfo.isContact ? '<br><span style="color:#d97706;">(Please contact support to arrange delivery fee separately)</span>' : `(${formatCurrency(paymentInfo.shipping)} included in total)`}
+                    </p>
                 </div>
 
                 <button id="confirm-payment-btn" class="btn btn-primary btn-block">
@@ -256,9 +303,10 @@ function showPaymentModal(amount) {
                 quantity: 1, // Simplified quantity
                 price: parseFloat(String(item.price).replace(/[^0-9.]/g, ''))
             })),
-            subtotal: amount,
-            shipping: 0, // Handled separately
-            total: amount
+            subtotal: paymentInfo.total - paymentInfo.shipping,
+            shipping: paymentInfo.shipping, // Recorded
+            shippingAddress: { deliveryLabel: paymentInfo.label },
+            total: paymentInfo.total
         };
 
         try {
