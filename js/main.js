@@ -711,19 +711,35 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- New Render Logic (Added to fix cart page rendering) ---
+const PROMO_DISCOUNT = 0.20; // 20% promo discount
+
 function renderCartItems() {
+    // Apply 20% discount to all cart items and update localStorage
+    const discountedItems = cartItems.map(item => {
+        const originalVal = parseFloat(String(item.price).replace(/[^0-9.]/g, '')) || 0;
+        const discountedVal = Math.round(originalVal * (1 - PROMO_DISCOUNT));
+        return {
+            ...item,
+            originalPrice: '₦' + originalVal.toLocaleString(),
+            price: '₦' + discountedVal.toLocaleString()
+        };
+    });
+
+    // Persist discounted prices to localStorage so checkout uses them
+    localStorage.setItem('cartItems', JSON.stringify(discountedItems));
+
     // 1. Handle Sidebar/Header Cart
     if (cartItemsContainer) {
         cartItemsContainer.innerHTML = '';
-        if (cartItems.length === 0) {
+        if (discountedItems.length === 0) {
             cartItemsContainer.innerHTML = '<div class="empty-cart-msg">Your bag is empty.</div>';
         } else {
-            cartItems.forEach(item => {
+            discountedItems.forEach(item => {
                 const itemEl = document.createElement('div');
                 itemEl.className = 'cart-item-sidebar';
                 itemEl.innerHTML = `
                     <div style="font-weight: bold;">${item.title}</div>
-                    <div>${item.price}</div>
+                    <div style="color: var(--color-secondary); font-weight:600;">${item.price} <span style="text-decoration:line-through; color:#aaa; font-size:0.8em;">${item.originalPrice}</span></div>
                 `;
                 cartItemsContainer.appendChild(itemEl);
             });
@@ -733,9 +749,10 @@ function renderCartItems() {
     // 2. Handle Main Cart Page
     if (cartPageContainer) {
         cartPageContainer.innerHTML = '';
-        let total = 0;
+        let originalTotal = 0;
+        let discountedTotal = 0;
 
-        if (cartItems.length === 0) {
+        if (discountedItems.length === 0) {
             cartPageContainer.innerHTML = `
                 <div class="empty-cart-msg">
                     <i data-lucide="shopping-bag" style="width: 48px; height: 48px; margin-bottom: 1rem; color: var(--color-gray-400);"></i>
@@ -744,23 +761,29 @@ function renderCartItems() {
                 </div>
             `;
         } else {
+            // Promo Banner
+            const promoBanner = document.createElement('div');
+            promoBanner.style.cssText = 'background: linear-gradient(135deg, #1B4D3E, #2d7a5e); color: white; padding: 0.75rem 1.25rem; border-radius: 0.75rem; text-align: center; margin-bottom: 1.5rem; font-weight: 700; font-size: 0.95rem; letter-spacing: 0.02em;';
+            promoBanner.innerHTML = `🎉 20% PROMO DISCOUNT APPLIED TO ALL ITEMS!`;
+            cartPageContainer.appendChild(promoBanner);
+
             // Header
             const headerEl = document.createElement('div');
             headerEl.className = 'cart-header';
             headerEl.style.textAlign = 'center';
             headerEl.style.marginBottom = '2rem';
-            headerEl.innerHTML = `
-                <h2 class="cart-section-title">Your Items (${cartItems.length})</h2>
-            `;
+            headerEl.innerHTML = `<h2 class="cart-section-title">Your Items (${discountedItems.length})</h2>`;
             cartPageContainer.appendChild(headerEl);
 
             // Grid
             const gridEl = document.createElement('div');
             gridEl.className = 'cart-grid';
 
-            cartItems.forEach((item, index) => {
-                const priceVal = parseFloat(item.price.replace(/[^0-9.]/g, ''));
-                total += priceVal;
+            discountedItems.forEach((item, index) => {
+                const originalVal = parseFloat(String(item.originalPrice).replace(/[^0-9.]/g, '')) || 0;
+                const discountedVal = parseFloat(String(item.price).replace(/[^0-9.]/g, '')) || 0;
+                originalTotal += originalVal;
+                discountedTotal += discountedVal;
 
                 const itemEl = document.createElement('div');
                 itemEl.className = 'cart-item';
@@ -776,9 +799,13 @@ function renderCartItems() {
                     ${imageContent}
                     <div class="cart-item-details">
                         <h3 class="cart-item-title">${item.title}</h3>
-                        <div class="cart-item-price">${item.price}</div>
+                        <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+                            <span class="cart-item-price" style="color: var(--color-secondary); font-weight:700;">${item.price}</span>
+                            <span style="text-decoration:line-through; color:#aaa; font-size:0.85em;">${item.originalPrice}</span>
+                            <span style="background:#dcfce7; color:#16a34a; font-size:0.7rem; font-weight:700; padding:2px 6px; border-radius:999px;">-20%</span>
+                        </div>
                     </div>
-                     <button onclick="removeItem(${index})" title="Remove Item" class="remove-btn" style="padding: 0.5rem; color: #dc2626; background: none; border: none; cursor: pointer; transition: transform 0.2s;">
+                    <button onclick="removeItem(${index})" title="Remove Item" class="remove-btn" style="padding: 0.5rem; color: #dc2626; background: none; border: none; cursor: pointer; transition: transform 0.2s;">
                         <i data-lucide="trash-2" style="width: 1.25rem; height: 1.25rem;"></i>
                     </button>
                 `;
@@ -786,15 +813,24 @@ function renderCartItems() {
             });
             cartPageContainer.appendChild(gridEl);
 
+            const savings = originalTotal - discountedTotal;
+
             // Actions & Total Section
             const actionsEl = document.createElement('div');
             actionsEl.className = 'cart-actions-container';
-
             actionsEl.innerHTML = `
                 <div class="cart-summary">
-                    <div class="cart-total-display">
+                    <div class="cart-total-display" style="text-decoration:line-through; color:#aaa; font-size:0.9rem; font-weight:400;">
+                        <span class="total-label">Original:</span>
+                        <span>₦${originalTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                    </div>
+                    <div class="cart-total-display" style="color:#16a34a; font-size:0.9rem;">
+                        <span class="total-label">You Save (20%):</span>
+                        <span>-₦${savings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                    </div>
+                    <div class="cart-total-display" style="margin-top:0.5rem;">
                         <span class="total-label">Subtotal:</span>
-                        <span class="total-amount">₦${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                        <span class="total-amount">₦${discountedTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
                     <p style="color: var(--color-gray-500); font-size: 0.6rem; margin-top: -0.5rem; margin-bottom: 0rem;"> Shipping calculated at checkout</p>
                     <a href="checkout.html" class="btn btn-secondary checkout-btn-styled">
@@ -809,11 +845,9 @@ function renderCartItems() {
     }
 
     if (cartTotalPriceEl) {
-        const total = cartItems.reduce((sum, item) => sum + parseFloat(item.price.replace(/[^0-9.]/g, '')), 0);
-        cartTotalPriceEl.textContent = '$' + total.toFixed(2);
+        const discountedTotal = discountedItems.reduce((sum, item) => sum + parseFloat(String(item.price).replace(/[^0-9.]/g, '')), 0);
+        cartTotalPriceEl.textContent = '₦' + discountedTotal.toLocaleString();
     }
-
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
 }
 
 // --- Events Section Removed by User Request ---
