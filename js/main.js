@@ -714,32 +714,47 @@ document.addEventListener('DOMContentLoaded', () => {
 const PROMO_DISCOUNT = 0.20; // 20% promo discount
 
 function renderCartItems() {
-    // Apply 20% discount to all cart items and update localStorage
-    const discountedItems = cartItems.map(item => {
-        const originalVal = parseFloat(String(item.price).replace(/[^0-9.]/g, '')) || 0;
+    // Generate an array of items with correct display prices (for UI only)
+    const displayItems = cartItems.map(item => {
+        // If the item already has an originalPrice set from a previous bugged state, use it
+        // Otherwise, use the standard price as the original.
+        const basePriceStr = item.originalPrice || item.price;
+        const originalVal = parseFloat(String(basePriceStr).replace(/[^0-9.]/g, '')) || 0;
         const discountedVal = Math.round(originalVal * (1 - PROMO_DISCOUNT));
+
         return {
             ...item,
-            originalPrice: '₦' + originalVal.toLocaleString(),
-            price: '₦' + discountedVal.toLocaleString()
+            originalPriceStr: '₦' + originalVal.toLocaleString(),
+            discountedPriceStr: '₦' + discountedVal.toLocaleString(),
+            originalValue: originalVal,
+            discountedValue: discountedVal
         };
     });
 
-    // Persist discounted prices to localStorage so checkout uses them
-    localStorage.setItem('cartItems', JSON.stringify(discountedItems));
+    // We NO LONGER overwrite cartItems in localStorage with the discounted price!
+    // We want localStorage to always hold the ORIGINAL price to prevent compounding discounts.
+    // However, if the user has a bugged cart (where price was overwritten and originalPrice was added),
+    // let's clean it up quietly.
+    const cleanCartItems = cartItems.map(item => {
+        if (item.originalPrice) {
+            return { id: item.id, title: item.title, price: item.originalPrice, color: item.color, image: item.image };
+        }
+        return item;
+    });
+    localStorage.setItem('cartItems', JSON.stringify(cleanCartItems));
 
     // 1. Handle Sidebar/Header Cart
     if (cartItemsContainer) {
         cartItemsContainer.innerHTML = '';
-        if (discountedItems.length === 0) {
+        if (displayItems.length === 0) {
             cartItemsContainer.innerHTML = '<div class="empty-cart-msg">Your bag is empty.</div>';
         } else {
-            discountedItems.forEach(item => {
+            displayItems.forEach(item => {
                 const itemEl = document.createElement('div');
                 itemEl.className = 'cart-item-sidebar';
                 itemEl.innerHTML = `
                     <div style="font-weight: bold;">${item.title}</div>
-                    <div style="color: var(--color-secondary); font-weight:600;">${item.price} <span style="text-decoration:line-through; color:#aaa; font-size:0.8em;">${item.originalPrice}</span></div>
+                    <div style="color: var(--color-secondary); font-weight:600;">${item.discountedPriceStr} <span style="text-decoration:line-through; color:#aaa; font-size:0.8em;">${item.originalPriceStr}</span></div>
                 `;
                 cartItemsContainer.appendChild(itemEl);
             });
@@ -752,7 +767,7 @@ function renderCartItems() {
         let originalTotal = 0;
         let discountedTotal = 0;
 
-        if (discountedItems.length === 0) {
+        if (displayItems.length === 0) {
             cartPageContainer.innerHTML = `
                 <div class="empty-cart-msg">
                     <i data-lucide="shopping-bag" style="width: 48px; height: 48px; margin-bottom: 1rem; color: var(--color-gray-400);"></i>
@@ -772,18 +787,16 @@ function renderCartItems() {
             headerEl.className = 'cart-header';
             headerEl.style.textAlign = 'center';
             headerEl.style.marginBottom = '2rem';
-            headerEl.innerHTML = `<h2 class="cart-section-title">Your Items (${discountedItems.length})</h2>`;
+            headerEl.innerHTML = `<h2 class="cart-section-title">Your Items (${displayItems.length})</h2>`;
             cartPageContainer.appendChild(headerEl);
 
             // Grid
             const gridEl = document.createElement('div');
             gridEl.className = 'cart-grid';
 
-            discountedItems.forEach((item, index) => {
-                const originalVal = parseFloat(String(item.originalPrice).replace(/[^0-9.]/g, '')) || 0;
-                const discountedVal = parseFloat(String(item.price).replace(/[^0-9.]/g, '')) || 0;
-                originalTotal += originalVal;
-                discountedTotal += discountedVal;
+            displayItems.forEach((item, index) => {
+                originalTotal += item.originalValue;
+                discountedTotal += item.discountedValue;
 
                 const itemEl = document.createElement('div');
                 itemEl.className = 'cart-item';
@@ -800,8 +813,8 @@ function renderCartItems() {
                     <div class="cart-item-details">
                         <h3 class="cart-item-title">${item.title}</h3>
                         <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
-                            <span class="cart-item-price" style="color: var(--color-secondary); font-weight:700;">${item.price}</span>
-                            <span style="text-decoration:line-through; color:#aaa; font-size:0.85em;">${item.originalPrice}</span>
+                            <span class="cart-item-price" style="color: var(--color-secondary); font-weight:700;">${item.discountedPriceStr}</span>
+                            <span style="text-decoration:line-through; color:#aaa; font-size:0.85em;">${item.originalPriceStr}</span>
                             <span style="background:#dcfce7; color:#16a34a; font-size:0.7rem; font-weight:700; padding:2px 6px; border-radius:999px;">-20%</span>
                         </div>
                     </div>
@@ -845,7 +858,7 @@ function renderCartItems() {
     }
 
     if (cartTotalPriceEl) {
-        const discountedTotal = discountedItems.reduce((sum, item) => sum + parseFloat(String(item.price).replace(/[^0-9.]/g, '')), 0);
+        const discountedTotal = displayItems.reduce((sum, item) => sum + item.discountedValue, 0);
         cartTotalPriceEl.textContent = '₦' + discountedTotal.toLocaleString();
     }
 }

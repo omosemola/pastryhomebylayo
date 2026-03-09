@@ -23,15 +23,30 @@ function renderCheckout() {
         return;
     }
 
-    // Base Totals
-    const subtotal = cartItems.reduce((sum, item) => {
-        const priceString = String(item.price).replace(/[^0-9.]/g, '');
-        return sum + (parseFloat(priceString) || 0);
-    }, 0);
+    const PROMO_DISCOUNT = 0.20;
+
+    // Base Totals (calculate both original and discounted)
+    let originalSubtotal = 0;
+    let discountedSubtotal = 0;
+
+    const displayItems = cartItems.map(item => {
+        const originalVal = parseFloat(String(item.price).replace(/[^0-9.]/g, '')) || 0;
+        const discountedVal = Math.round(originalVal * (1 - PROMO_DISCOUNT));
+        originalSubtotal += originalVal;
+        discountedSubtotal += discountedVal;
+
+        return {
+            ...item,
+            originalPriceStr: '₦' + originalVal.toLocaleString(),
+            discountedPriceStr: '₦' + discountedVal.toLocaleString(),
+            originalValue: originalVal,
+            discountedValue: discountedVal
+        };
+    });
 
     const tax = 0;
     let shipping = 1000; // Default to option 1
-    let total = subtotal + tax + shipping;
+    let total = discountedSubtotal + tax + shipping; // Total based on discounted subtotal
 
     checkoutContent.innerHTML = `
         <div class="checkout-grid">
@@ -106,23 +121,34 @@ function renderCheckout() {
                 <h2 class="section-title">Order Summary</h2>
                 
                 <div id="order-items">
-                    ${cartItems.map(item => `
+                    ${displayItems.map(item => `
                         <div class="order-item">
                             <div class="order-item-img">
                                 ${item.image && item.image.includes('<img') ? item.image : `<span style="font-size: 1.5rem;">${item.image || '🧁'}</span>`}
                             </div>
                             <div class="order-item-details">
                                 <div class="order-item-title">${item.title}</div>
-                                <div class="order-item-price">${formatCurrency(parseFloat(String(item.price).replace(/[^0-9.]/g, '') || 0))}</div>
+                                <div class="order-item-price">
+                                    <span style="color: var(--color-secondary); font-weight:700;">${item.discountedPriceStr}</span>
+                                    <span style="text-decoration:line-through; color:#aaa; font-size:0.85em; margin-left:4px;">${item.originalPriceStr}</span>
+                                </div>
                             </div>
                         </div>
                     `).join('')}
                 </div>
 
                 <div class="order-summary-totals">
-                    <div class="summary-row">
+                    <div class="summary-row" style="text-decoration:line-through; color:#aaa; font-size:0.9rem;">
+                        <span>Original Subtotal</span>
+                        <span>${formatCurrency(originalSubtotal)}</span>
+                    </div>
+                    <div class="summary-row" style="color:#16a34a; font-size:0.9rem;">
+                        <span>Promo Discount (20%)</span>
+                        <span>-${formatCurrency(originalSubtotal - discountedSubtotal)}</span>
+                    </div>
+                    <div class="summary-row" style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid #eee;">
                         <span>Subtotal</span>
-                        <span>${formatCurrency(subtotal)}</span>
+                        <span>${formatCurrency(discountedSubtotal)}</span>
                     </div>
                     <div class="summary-row">
                         <span>Delivery Fee</span>
@@ -159,7 +185,7 @@ function renderCheckout() {
             currentShipping = 0;
             deliveryNote.style.display = 'block';
             summaryDelivery.textContent = "To Be Communicated";
-            mainCheckoutBtn.innerHTML = `Proceed to Pay Base Amount - ${formatCurrency(subtotal)}`;
+            mainCheckoutBtn.innerHTML = `Proceed to Pay Base Amount - ${formatCurrency(discountedSubtotal)}`;
             deliveryLabel = selectedText;
         } else {
             currentShipping = parseFloat(val);
@@ -168,7 +194,7 @@ function renderCheckout() {
             deliveryLabel = selectedText;
         }
 
-        currentTotal = subtotal + tax + currentShipping;
+        currentTotal = discountedSubtotal + tax + currentShipping;
 
         if (val !== 'contact') {
             mainCheckoutBtn.innerHTML = `Proceed to Pay - ${formatCurrency(currentTotal)}`;
@@ -297,12 +323,16 @@ function showPaymentModal(paymentInfo) {
 
         const orderData = {
             customer,
-            items: validItems.map(item => ({
-                product: item.id,
-                name: item.title,
-                quantity: 1, // Simplified quantity
-                price: parseFloat(String(item.price).replace(/[^0-9.]/g, ''))
-            })),
+            items: validItems.map(item => {
+                const originalVal = parseFloat(String(item.price).replace(/[^0-9.]/g, '')) || 0;
+                const discountedVal = Math.round(originalVal * (1 - PROMO_DISCOUNT));
+                return {
+                    product: item.id,
+                    name: item.title,
+                    quantity: 1, // Simplified quantity
+                    price: discountedVal // Pass the dynamically computed discounted price to the backend
+                };
+            }),
             subtotal: paymentInfo.total - paymentInfo.shipping,
             shipping: paymentInfo.shipping, // Recorded
             shippingAddress: { deliveryLabel: paymentInfo.label },
