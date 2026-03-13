@@ -53,37 +53,26 @@ function renderCheckout() {
                 <h2 class="section-title">Customer Information</h2>
                 <form id="checkout-form">
                     <div class="form-group">
-                        <label class="form-label" for="email">Email Address <span style="color: red;">*</span></label>
-                        <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
+                        <label class="form-label" for="fullName">Full Name <span style="color: red;">*</span></label>
+                        <input type="text" id="fullName" class="form-input" placeholder="Jane Doe" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email Address <span style="color: red;">*</span></label>
+                            <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="phone">Phone Number <span style="color: red;">*</span></label>
+                            <input type="tel" id="phone" class="form-input" placeholder="09012345678" required>
+                        </div>
                     </div>
 
                     <h3 class="section-title" style="font-size: 1.25rem; margin-top: 2rem;">Shipping Address</h3>
                     
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="firstName">First Name <span style="color: red;">*</span></label>
-                            <input type="text" id="firstName" class="form-input" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="lastName">Last Name <span style="color: red;">*</span></label>
-                            <input type="text" id="lastName" class="form-input" required>
-                        </div>
-                    </div>
-
                     <div class="form-group">
-                        <label class="form-label" for="address">Street Address <span style="color: red;">*</span></label>
-                        <input type="text" id="address" class="form-input" required>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="city">City <span style="color: red;">*</span></label>
-                            <input type="text" id="city" class="form-input" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="phone">Phone Number <span style="color: red;">*</span></label>
-                            <input type="tel" id="phone" class="form-input" required>
-                        </div>
+                        <label class="form-label" for="address">Full Delivery Address <span style="color: red;">*</span></label>
+                        <textarea id="address" class="form-input" placeholder="123 Example Street, Lekki Phase 1, Lagos" rows="3" required style="resize: vertical;"></textarea>
                     </div>
 
                     <div class="form-group" style="margin-top: 2rem; background: var(--color-gray-100); padding: 1.5rem; border-radius: 1rem;">
@@ -299,12 +288,12 @@ function showPaymentModal(paymentInfo) {
 
         // Gather Order Data
         const customer = {
-            name: document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value,
+            name: document.getElementById('fullName').value,
             email: document.getElementById('email').value,
             phone: document.getElementById('phone').value,
             address: {
                 street: document.getElementById('address').value,
-                city: document.getElementById('city').value,
+                city: 'Delivery Address', // Consolidated into street for simplicity
                 state: 'Lagos', // Defaulting for now
                 zipCode: '00000'
             }
