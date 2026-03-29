@@ -23,29 +23,23 @@ function renderCheckout() {
         return;
     }
 
-    // Base Totals (calculate both original and discounted)
+    // Base Totals
     let originalSubtotal = 0;
-    let discountedSubtotal = 0;
 
     const displayItems = cartItems.map(item => {
         const originalVal = parseFloat(String(item.price).replace(/[^0-9.]/g, '')) || 0;
-        const discountedVal = Math.round(originalVal * (1 - PROMO_DISCOUNT));
         originalSubtotal += originalVal;
-        discountedSubtotal += discountedVal;
 
         return {
             ...item,
             originalPriceStr: '₦' + originalVal.toLocaleString(),
-            discountedPriceStr: '₦' + discountedVal.toLocaleString(),
-            originalValue: originalVal,
-            discountedValue: discountedVal
+            originalValue: originalVal
         };
     });
 
     const tax = 0;
     let shipping = 1000; // Default to option 1
-    let total = discountedSubtotal + tax + shipping; // Total based on discounted subtotal
-
+    let total = originalSubtotal + tax + shipping; // Total based on original subtotal
     checkoutContent.innerHTML = `
         <div class="checkout-grid">
             <!-- Customer Information Form -->
@@ -116,8 +110,7 @@ function renderCheckout() {
                             <div class="order-item-details">
                                 <div class="order-item-title">${item.title}</div>
                                 <div class="order-item-price">
-                                    <span style="color: var(--color-secondary); font-weight:700;">${item.discountedPriceStr}</span>
-                                    <span style="text-decoration:line-through; color:#aaa; font-size:0.85em; margin-left:4px;">${item.originalPriceStr}</span>
+                                    <span style="color: var(--color-secondary); font-weight:700;">${item.originalPriceStr}</span>
                                 </div>
                             </div>
                         </div>
@@ -125,17 +118,9 @@ function renderCheckout() {
                 </div>
 
                 <div class="order-summary-totals">
-                    <div class="summary-row" style="text-decoration:line-through; color:#aaa; font-size:0.9rem;">
-                        <span>Original Subtotal</span>
-                        <span>${formatCurrency(originalSubtotal)}</span>
-                    </div>
-                    <div class="summary-row" style="color:#16a34a; font-size:0.9rem;">
-                        <span>Promo Discount (20%)</span>
-                        <span>-${formatCurrency(originalSubtotal - discountedSubtotal)}</span>
-                    </div>
                     <div class="summary-row" style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid #eee;">
                         <span>Subtotal</span>
-                        <span>${formatCurrency(discountedSubtotal)}</span>
+                        <span>${formatCurrency(originalSubtotal)}</span>
                     </div>
                     <div class="summary-row">
                         <span>Delivery Fee</span>
@@ -172,7 +157,7 @@ function renderCheckout() {
             currentShipping = 0;
             deliveryNote.style.display = 'block';
             summaryDelivery.textContent = "To Be Communicated";
-            mainCheckoutBtn.innerHTML = `Proceed to Pay Base Amount - ${formatCurrency(discountedSubtotal)}`;
+            mainCheckoutBtn.innerHTML = `Proceed to Pay Base Amount - ${formatCurrency(originalSubtotal)}`;
             deliveryLabel = selectedText;
         } else {
             currentShipping = parseFloat(val);
@@ -181,7 +166,7 @@ function renderCheckout() {
             deliveryLabel = selectedText;
         }
 
-        currentTotal = discountedSubtotal + tax + currentShipping;
+        currentTotal = originalSubtotal + tax + currentShipping;
 
         if (val !== 'contact') {
             mainCheckoutBtn.innerHTML = `Proceed to Pay - ${formatCurrency(currentTotal)}`;
@@ -312,12 +297,11 @@ function showPaymentModal(paymentInfo) {
             customer,
             items: validItems.map(item => {
                 const originalVal = parseFloat(String(item.price).replace(/[^0-9.]/g, '')) || 0;
-                const discountedVal = Math.round(originalVal * (1 - PROMO_DISCOUNT));
                 return {
                     product: item.id,
                     name: item.title,
                     quantity: 1, // Simplified quantity
-                    price: discountedVal // Pass the dynamically computed discounted price to the backend
+                    price: originalVal // Pass the dynamically computed original price to the backend
                 };
             }),
             subtotal: paymentInfo.total - paymentInfo.shipping,

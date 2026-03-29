@@ -10,7 +10,6 @@ const prevBtn = document.getElementById('prev-slide');
 const nextBtn = document.getElementById('next-slide');
 
 // Cart & Promo Data
-const PROMO_DISCOUNT = 0.20; // 20% promo discount
 const cartBtns = document.querySelectorAll('.add-btn, .text-link-btn');
 const cartCountEl = document.querySelector('.cart-count');
 const cartIconBtn = document.querySelector('.cart-btn');
@@ -720,14 +719,11 @@ function renderCartItems() {
         // Otherwise, use the standard price as the original.
         const basePriceStr = item.originalPrice || item.price;
         const originalVal = parseFloat(String(basePriceStr).replace(/[^0-9.]/g, '')) || 0;
-        const discountedVal = Math.round(originalVal * (1 - PROMO_DISCOUNT));
 
         return {
             ...item,
             originalPriceStr: '₦' + originalVal.toLocaleString(),
-            discountedPriceStr: '₦' + discountedVal.toLocaleString(),
-            originalValue: originalVal,
-            discountedValue: discountedVal
+            originalValue: originalVal
         };
     });
 
@@ -754,7 +750,7 @@ function renderCartItems() {
                 itemEl.className = 'cart-item-sidebar';
                 itemEl.innerHTML = `
                     <div style="font-weight: bold;">${item.title}</div>
-                    <div style="color: var(--color-secondary); font-weight:600;">${item.discountedPriceStr} <span style="text-decoration:line-through; color:#aaa; font-size:0.8em;">${item.originalPriceStr}</span></div>
+                    <div style="color: var(--color-secondary); font-weight:600;">${item.originalPriceStr}</div>
                 `;
                 cartItemsContainer.appendChild(itemEl);
             });
@@ -765,7 +761,6 @@ function renderCartItems() {
     if (cartPageContainer) {
         cartPageContainer.innerHTML = '';
         let originalTotal = 0;
-        let discountedTotal = 0;
 
         if (displayItems.length === 0) {
             cartPageContainer.innerHTML = `
@@ -776,12 +771,6 @@ function renderCartItems() {
                 </div>
             `;
         } else {
-            // Promo Banner
-            const promoBanner = document.createElement('div');
-            promoBanner.style.cssText = 'background: linear-gradient(135deg, #1B4D3E, #2d7a5e); color: white; padding: 0.75rem 1.25rem; border-radius: 0.75rem; text-align: center; margin-bottom: 1.5rem; font-weight: 700; font-size: 0.95rem; letter-spacing: 0.02em;';
-            promoBanner.innerHTML = `🎉 20% PROMO DISCOUNT APPLIED TO ALL ITEMS!`;
-            cartPageContainer.appendChild(promoBanner);
-
             // Header
             const headerEl = document.createElement('div');
             headerEl.className = 'cart-header';
@@ -796,7 +785,6 @@ function renderCartItems() {
 
             displayItems.forEach((item, index) => {
                 originalTotal += item.originalValue;
-                discountedTotal += item.discountedValue;
 
                 const itemEl = document.createElement('div');
                 itemEl.className = 'cart-item';
@@ -813,9 +801,7 @@ function renderCartItems() {
                     <div class="cart-item-details">
                         <h3 class="cart-item-title">${item.title}</h3>
                         <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
-                            <span class="cart-item-price" style="color: var(--color-secondary); font-weight:700;">${item.discountedPriceStr}</span>
-                            <span style="text-decoration:line-through; color:#aaa; font-size:0.85em;">${item.originalPriceStr}</span>
-                            <span style="background:#dcfce7; color:#16a34a; font-size:0.7rem; font-weight:700; padding:2px 6px; border-radius:999px;">-20%</span>
+                            <span class="cart-item-price" style="color: var(--color-secondary); font-weight:700;">${item.originalPriceStr}</span>
                         </div>
                     </div>
                     <button onclick="removeItem(${index})" title="Remove Item" class="remove-btn" style="padding: 0.5rem; color: #dc2626; background: none; border: none; cursor: pointer; transition: transform 0.2s;">
@@ -826,24 +812,14 @@ function renderCartItems() {
             });
             cartPageContainer.appendChild(gridEl);
 
-            const savings = originalTotal - discountedTotal;
-
             // Actions & Total Section
             const actionsEl = document.createElement('div');
             actionsEl.className = 'cart-actions-container';
             actionsEl.innerHTML = `
                 <div class="cart-summary">
-                    <div class="cart-total-display" style="text-decoration:line-through; color:#aaa; font-size:0.9rem; font-weight:400;">
-                        <span class="total-label">Original:</span>
-                        <span>₦${originalTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                    </div>
-                    <div class="cart-total-display" style="color:#16a34a; font-size:0.9rem;">
-                        <span class="total-label">You Save (20%):</span>
-                        <span>-₦${savings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                    </div>
                     <div class="cart-total-display" style="margin-top:0.5rem;">
                         <span class="total-label">Subtotal:</span>
-                        <span class="total-amount">₦${discountedTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                        <span class="total-amount">₦${originalTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
                     <p style="color: var(--color-gray-500); font-size: 0.6rem; margin-top: -0.5rem; margin-bottom: 0rem;"> Shipping calculated at checkout</p>
                     <a href="checkout.html" class="btn btn-secondary checkout-btn-styled">
@@ -858,8 +834,8 @@ function renderCartItems() {
     }
 
     if (cartTotalPriceEl) {
-        const discountedTotal = displayItems.reduce((sum, item) => sum + item.discountedValue, 0);
-        cartTotalPriceEl.textContent = '₦' + discountedTotal.toLocaleString();
+        const originalTotal = displayItems.reduce((sum, item) => sum + item.originalValue, 0);
+        cartTotalPriceEl.textContent = '₦' + originalTotal.toLocaleString();
     }
 }
 
